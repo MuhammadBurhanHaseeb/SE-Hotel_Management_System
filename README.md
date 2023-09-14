@@ -8,8 +8,13 @@ Staff management: The app can be used to manage staff schedules, tasks, and perf
 Inventory management: The app can be used to manage hotel inventory, such as food, beverages, and linens.
 Financial management: The app can be used to manage hotel finances, such as tracking revenue and expenses.
 Hotel management apps can help hotels to improve their efficiency, productivity, and profitability. They can also help to improve the guest experience by providing a more convenient and personalized service.
+
 **Installation instructions**
+
 **Usage instructions**
+
 **Contribution guidelines**
+
 **License**
+
 **Contact information**
