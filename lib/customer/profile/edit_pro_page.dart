@@ -12,6 +12,28 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  DateTime? selectedDate = null; // Add this line to store the selected date
+  @override
+  String formatDate(DateTime date) {
+    return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString()}";
+  }
+  @override
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+
+      // Handle the selected date if needed
+    }
+  }
   @override
   Widget build(BuildContext context) {
     // Initial value
@@ -48,7 +70,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
             CustomTextField(hintText: "Full Name", onchangedFunction: (value) {},obscureTexthehe : false),
             CustomTextField(hintText: "CNIC", onchangedFunction: (value) {},obscureTexthehe : false),
             CustomTextField(
-                hintText: "Date of Birth", onchangedFunction: (value) {},obscureTexthehe : false),
+              initialValue: selectedDate != null ? formatDate(selectedDate!) : '',
+              hintText: "Date of Birth",
+              obscureTexthehe: false,
+              suffixWidget: GestureDetector(
+                  onTap: (){
+                    _selectDate(context);
+                  },
+                  child: Icon(Icons.calendar_month_rounded,color: Color(0xFF17203A),)),
+              onchangedFunction: (value){
+                ///password = value;
+              },
+            ),
             GenderSelector(),
             SelectPhoneNo(),
             CustomTextField(hintText: "Email", onchangedFunction: (value) {},obscureTexthehe : false),

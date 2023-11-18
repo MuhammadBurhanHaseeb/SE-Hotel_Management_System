@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/splash/background.dart';
-import '../SignIN/SignUPFolder/SignIn.dart';
+import '../SignIN/SignIn.dart';
 import '../SignIN/chooser_role.dart';
 
 class SplashScreen extends StatefulWidget {

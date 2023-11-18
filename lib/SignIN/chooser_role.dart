@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'SignUPFolder/SignIn.dart';
+import 'SignIn.dart';
 
 class ChooseRoleScreen extends StatefulWidget {
   const ChooseRoleScreen({Key? key}) : super(key: key);

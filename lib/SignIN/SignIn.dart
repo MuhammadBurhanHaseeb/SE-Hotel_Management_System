@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hotel_app/SignIN/SignUPFolder/SignUp.dart';
 import 'package:hotel_app/SignIN/SignUPFolder/components/textbox.dart';
 
-import '../../customer/components/final_bottom_bar.dart';
-import '../../customer/home/main_customer_home.dart';
-import '../../customer/profile/custom_textfield.dart';
+import '../customer/components/final_bottom_bar.dart';
+import '../customer/home/main_customer_home.dart';
+import '../customer/profile/custom_textfield.dart';
 
 class SignInScreen extends StatefulWidget {
   final bool isCustomer;
@@ -50,7 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
               //   ),
               // ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(30.0),
                 child: Text(
                   "Login to your Account",
                   style: TextStyle(
@@ -101,7 +101,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                     },
                     child: Text(
-                      "Login",
+                      "  Login  ",
                       style: TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 17,
@@ -154,7 +154,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
 
           ),

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final Widget? prefixWidget;
+  final Widget? suffixWidget;
   final Function(String) onchangedFunction;
   final bool obscureTexthehe;
+  final String? initialValue;
   const CustomTextField({
-    super.key, required this.hintText, this.prefixWidget, required this.onchangedFunction, required this.obscureTexthehe,
+    super.key, required this.hintText, this.prefixWidget, required this.onchangedFunction, required this.obscureTexthehe, this.initialValue, this.suffixWidget,
   });
 
   @override
@@ -16,7 +18,9 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         obscureText: obscureTexthehe,
         onChanged: onchangedFunction,
+        controller: TextEditingController(text: initialValue),
         decoration: InputDecoration(
+          suffixIcon: suffixWidget,
           prefixIcon: prefixWidget,
           hintText: hintText,
           hintStyle: TextStyle(
