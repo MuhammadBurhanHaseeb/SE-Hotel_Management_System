@@ -7,8 +7,9 @@ class CustomTextField extends StatelessWidget {
   final Function(String) onchangedFunction;
   final bool obscureTexthehe;
   final String? initialValue;
+  final String? errorTexi;
   const CustomTextField({
-    super.key, required this.hintText, this.prefixWidget, required this.onchangedFunction, required this.obscureTexthehe, this.initialValue, this.suffixWidget,
+    super.key, required this.hintText, this.prefixWidget, required this.onchangedFunction, required this.obscureTexthehe, this.initialValue, this.suffixWidget, this.errorTexi,
   });
 
   @override
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
         onChanged: onchangedFunction,
         controller: TextEditingController(text: initialValue),
         decoration: InputDecoration(
+          errorText: errorTexi,
           suffixIcon: suffixWidget,
           prefixIcon: prefixWidget,
           hintText: hintText,

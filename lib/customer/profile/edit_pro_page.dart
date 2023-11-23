@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'custom_textfield.dart';
+import '../components/custom_textfield.dart';
 import 'gender.dart';
 import 'ph_no.dart';
 

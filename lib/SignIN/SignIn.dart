@@ -4,7 +4,14 @@ import 'package:hotel_app/SignIN/SignUPFolder/components/textbox.dart';
 
 import '../customer/components/final_bottom_bar.dart';
 import '../customer/home/main_customer_home.dart';
-import '../customer/profile/custom_textfield.dart';
+import '../customer/components/custom_textfield.dart';
+
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:http/http.dart' as http;
+import '../nodejs_routes.dart';
+import '../dashi.dart';
 
 class SignInScreen extends StatefulWidget {
   final bool isCustomer;
@@ -15,7 +22,67 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  // bool notvisible = true;
+  String email = '';
+  String password = '';
+  bool _isNotValidate = false;
+  late SharedPreferences prefs;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSharedPref();
+  }
+  void initSharedPref() async{
+    prefs = await SharedPreferences.getInstance();
+  }
+  void loginUser() async{
+    if(email.isNotEmpty && password.isNotEmpty){
+      var reqBody = {
+        "email":email,
+        "password":password
+      };
+      var response = await http.post(Uri.parse(login),
+          headers: {"Content-Type":"application/json"},
+          body: jsonEncode(reqBody)
+      );
+      var jsonResponse = jsonDecode(response.body);
+      if(jsonResponse['status']){
+
+        ///....... this token contain the value of the current user who has logined and it is created in login function in user.controller.js file
+        ///....... and we are using shared preferences that is helping us getting this token from user.controller.js file to local phone or using device
+        ///....... storing the token in shared prefrences is basically the remember logined info option = true
+        var myToken = jsonResponse['token'];
+        prefs.setString('token', myToken);
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(token: myToken)));
+
+      }else{
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                surfaceTintColor: Colors.transparent,
+                title: Text('Error',style: TextStyle(
+                  fontFamily: "Poppins",
+                  color: Colors.red[300],
+                ),),
+                content: Text('${jsonResponse['error']}',style: TextStyle(
+                  fontFamily: "Poppins",
+                ),),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('OK',style: TextStyle(
+                        fontFamily: "Poppins",
+                        color: Colors.blue
+                    ),),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                  ),
+                ],
+              );});
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -33,22 +100,6 @@ class _SignInScreenState extends State<SignInScreen> {
         child: Center(
           child: Column(
             children: <Widget>[
-              // SizedBox(
-              //   height: size.height * 0.12,
-              // ),
-              // Center(
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(bottom: 50.0),
-              //     child: Container(
-              //       height: size.height*0.15,
-              //       width: size.width*0.32,
-              //       child: Image.asset(
-              //           "assets/images/منزل.png",
-              //         fit: BoxFit.cover,
-              //       ),
-              //     ),
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Text(
@@ -62,22 +113,25 @@ class _SignInScreenState extends State<SignInScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 10.0,right: 10),
                 child: CustomTextField(
+                  initialValue: email.isEmpty?'':email,
                   hintText: "Enter your email",
                   obscureTexthehe: false,
                   prefixWidget: Icon(Icons.email_rounded,color: Color(0xFF17203A),),
                   onchangedFunction: (value){
-                    ///username = value;
+                    email= value;
                   },
+                  errorTexi: _isNotValidate ? "Enter proper info" :null,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0,right: 10),
                 child: CustomTextField(
+                  initialValue: password.isEmpty?'':password,
                   hintText: "Enter your password",
                   obscureTexthehe: true,
                   prefixWidget: Icon(Icons.key,color: Color(0xFF17203A),),
                   onchangedFunction: (value){
-                    ///password = value;
+                    password = value;
                   },
                 ),
               ),
@@ -97,7 +151,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => FinalBottomNav()));
+                      //Navigator.push(context, MaterialPageRoute(builder: (context) => FinalBottomNav()));
+                      loginUser();
+                      print("LOGINED");
 
                     },
                     child: Text(
@@ -141,14 +197,14 @@ class _SignInScreenState extends State<SignInScreen> {
 
                         ),
                         child: Text('SignUp',
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Color(0xffA0DAFB),
-                          fontSize: 17,
-                          fontFamily: "PoppinsBold",
-                          color: Color(0xffA0DAFB),
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            decorationColor: Color(0xffA0DAFB),
+                            fontSize: 17,
+                            fontFamily: "PoppinsBold",
+                            color: Color(0xffA0DAFB),
+                          ),
                         ),
-                      ),
                       ),
 
                     ],
@@ -163,3 +219,4 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 }
+

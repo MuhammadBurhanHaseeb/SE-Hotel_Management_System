@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:hotel_app/SignIN/SignIn.dart';
 import 'package:hotel_app/SignIN/SignUPFolder/components/textbox.dart';
 import 'package:hotel_app/customer/newbookingpages/receipt.dart';
-import 'package:hotel_app/customer/profile/custom_textfield.dart';
+import 'package:hotel_app/customer/components/custom_textfield.dart';
 
 import '../../customer/home/main_customer_home.dart';
 import 'credentials_after_signup.dart';
+
+import 'dart:convert';
+import 'dart:math';
+import 'package:flutter/services.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
+
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -15,37 +23,74 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  // bool notvisible = true;
+  String email = '';
+  String password = '' ;
+  bool _isNotValidate = false;
+
+  void registerUser() async{
+    if(email.isNotEmpty && password.isNotEmpty){
+      var regBody = {               //an object to send to backend
+        "email":email,
+        "password":password
+      };
+      var response = await http.post(Uri.parse(registration),
+          headers: {"Content-Type":"application/json"},
+          body: jsonEncode(regBody)
+      );
+      var jsonResponse = jsonDecode(response.body);
+      print(jsonResponse['status']);
+      if(jsonResponse['status']){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>CredentialsAfterSignUp()));
+      }else{
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                surfaceTintColor: Colors.transparent,
+                title: Text('Error',style: TextStyle(
+                    fontFamily: "Poppins",
+                    color: Colors.red[300],
+                ),),
+                content: Text('${jsonResponse['error']}',style: TextStyle(
+                    fontFamily: "Poppins",
+                ),),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('OK',style: TextStyle(
+                      fontFamily: "Poppins",
+                      color: Colors.blue
+                    ),),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                  ),
+                ],
+              );});
+        //print("SomeThing Went Wrong: ${jsonResponse['error']}");
+      }
+    }else{
+      setState(() {
+        _isNotValidate = true;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: BackButton(
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        ),
+        // leading: BackButton(
+        //   onPressed: (){
+        //     Navigator.pop(context);
+        //   },
+        // ),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: <Widget>[
-              // SizedBox(
-              //   height: size.height * 0.12,
-              // ),
-              // Center(
-              //   child: Container(
-              //     height: size.height*0.15,
-              //     width: size.width*0.32,
-              //     child: Image.asset(
-              //       "assets/images/منزل.png",
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Text(
@@ -59,23 +104,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 10.0,right: 10),
                 child: CustomTextField(
+                  initialValue: email.isEmpty?'':email,
                   hintText: "Enter your email",
                   obscureTexthehe: false,
                   prefixWidget: Icon(Icons.email_rounded,color: Color(0xFF17203A),),
                   onchangedFunction: (value){
-                    ///username = value;
+                    email = value;
                   },
+                  errorTexi: _isNotValidate ? "Enter proper info" :null,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0,right: 10),
                 child: CustomTextField(
+                  initialValue: password.isEmpty?'':password,
                   hintText: "Enter your password",
                   obscureTexthehe: true,
                   prefixWidget: Icon(Icons.key,color: Color(0xFF17203A),),
                   onchangedFunction: (value){
-                    ///password = value;
+                    password = value;
                   },
+                  errorTexi: _isNotValidate ? "Enter proper info" :null,
                 ),
               ),
               Padding(
@@ -94,8 +143,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CredentialsAfterSignUp()));
-
+                      //Navigator.push(context, MaterialPageRoute(builder: (context) => CredentialsAfterSignUp()));
+                      registerUser();
+                      print(" USER ADDED");
                     },
                     child: Text(
                       "Continue",
@@ -158,7 +208,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextButton(
                       onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignInScreen(isCustomer: true)));
                       },
                       style: ButtonStyle(
 

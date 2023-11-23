@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../profile/custom_textfield.dart';
+import '../components/custom_textfield.dart';
 import '../profile/payment.dart';
 import '../profile/ph_no.dart';
 

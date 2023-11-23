@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/customer/components/final_bottom_bar.dart';
-import 'package:hotel_app/customer/profile/custom_textfield.dart';
+import 'package:hotel_app/customer/components/custom_textfield.dart';
 import 'package:hotel_app/customer/profile/gender.dart';
 import 'package:hotel_app/customer/profile/ph_no.dart';
 
