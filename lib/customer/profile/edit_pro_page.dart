@@ -12,6 +12,9 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  String gender = '';
+  String countrycode = '';
+  String phoneNumber = '';
   DateTime? selectedDate = null; // Add this line to store the selected date
   @override
   String formatDate(DateTime date) {
@@ -82,8 +85,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ///password = value;
               },
             ),
-            GenderSelector(),
-            SelectPhoneNo(),
+            GenderSelector(
+              onGenderChanged: (value) {
+                setState(() {
+                  gender = value; // Update the selected gender in parent widget
+                });
+              },
+            ),
+            SelectPhoneNo(
+              onCountryCodeChanged: (value) {
+                setState(() {
+                  countrycode = value; // Update the selected gender in parent widget
+                });
+              },
+              onPhoneNoChanged: (value) {
+                setState(() {
+                  phoneNumber = value; // Update the selected gender in parent widget
+                });
+              },
+            ),
             CustomTextField(hintText: "Email", onchangedFunction: (value) {},obscureTexthehe : false),
             CustomTextField(hintText: "Password", onchangedFunction: (value) {},obscureTexthehe : true),
 

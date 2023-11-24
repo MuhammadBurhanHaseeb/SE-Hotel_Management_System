@@ -6,7 +6,9 @@ import '../components/custom_textfield.dart';
 
 
 class SelectPhoneNo extends StatefulWidget {
-  const SelectPhoneNo({Key? key}) : super(key: key);
+  final void Function(String) onPhoneNoChanged;
+  final void Function(String) onCountryCodeChanged;
+  const SelectPhoneNo({Key? key, required this.onPhoneNoChanged, required this.onCountryCodeChanged}) : super(key: key);
 
   @override
   State<SelectPhoneNo> createState() => _SelectPhoneNoState();
@@ -19,10 +21,13 @@ class _SelectPhoneNoState extends State<SelectPhoneNo> {
     return CustomTextField(
        obscureTexthehe : false,
         hintText: "Phone Number",
-        onchangedFunction: (value) {},
+        onchangedFunction: (value) {
+          widget.onPhoneNoChanged(value!);
+        },
         prefixWidget: CountryCodePicker(
           onChanged: (CountryCode){
             myCountryCode= CountryCode.toString();
+            widget.onCountryCodeChanged(CountryCode.toString()!);
             //print(myCountryCode);
           },
           // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')

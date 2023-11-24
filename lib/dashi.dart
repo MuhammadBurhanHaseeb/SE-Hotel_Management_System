@@ -30,72 +30,72 @@ class _DashboardState extends State<Dashboard> {
 
     email = jwtDecodedToken['email'];
     userId = jwtDecodedToken['_id'];
-    getTodoList(userId);
+    // getTodoList(userId);
   }
 
-  void addTodo() async{
-    if(_todoTitle.text.isNotEmpty && _todoDesc.text.isNotEmpty){
-
-      var regBody = {
-        "userId":userId,
-        "title":_todoTitle.text,
-        "desc":_todoDesc.text
-      };
-
-      var response = await http.post(Uri.parse(addtodo),
-          headers: {"Content-Type":"application/json"},
-          body: jsonEncode(regBody)
-      );
-
-      var jsonResponse = jsonDecode(response.body);
-
-      print(jsonResponse['status']);
-
-      if(jsonResponse['status']){
-        _todoDesc.clear();
-        _todoTitle.clear();
-        Navigator.pop(context);
-        getTodoList(userId);
-      }else{
-        print("SomeThing Went Wrong");
-      }
-    }
-  }
-
-  void getTodoList(userId) async {
-    var regBody = {
-      "userId":userId
-    };
-
-    var response = await http.post(Uri.parse(getToDoList),
-        headers: {"Content-Type":"application/json"},
-        body: jsonEncode(regBody)
-    );
-
-    var jsonResponse = jsonDecode(response.body);
-    items = jsonResponse['success'];
-
-    setState(() {
-
-    });
-  }
-
-  void deleteItem(id) async{
-    var regBody = {
-      "id":id
-    };
-
-    var response = await http.post(Uri.parse(deleteTodo),
-        headers: {"Content-Type":"application/json"},
-        body: jsonEncode(regBody)
-    );
-
-    var jsonResponse = jsonDecode(response.body);
-    if(jsonResponse['status']){
-      getTodoList(userId);
-    }
-
-  }
+  // void addTodo() async{
+  //   if(_todoTitle.text.isNotEmpty && _todoDesc.text.isNotEmpty){
+  //
+  //     var regBody = {
+  //       "userId":userId,
+  //       "title":_todoTitle.text,
+  //       "desc":_todoDesc.text
+  //     };
+  //
+  //     var response = await http.post(Uri.parse(addtodo),
+  //         headers: {"Content-Type":"application/json"},
+  //         body: jsonEncode(regBody)
+  //     );
+  //
+  //     var jsonResponse = jsonDecode(response.body);
+  //
+  //     print(jsonResponse['status']);
+  //
+  //     if(jsonResponse['status']){
+  //       _todoDesc.clear();
+  //       _todoTitle.clear();
+  //       Navigator.pop(context);
+  //       getTodoList(userId);
+  //     }else{
+  //       print("SomeThing Went Wrong");
+  //     }
+  //   }
+  // }
+  //
+  // void getTodoList(userId) async {
+  //   var regBody = {
+  //     "userId":userId
+  //   };
+  //
+  //   var response = await http.post(Uri.parse(getToDoList),
+  //       headers: {"Content-Type":"application/json"},
+  //       body: jsonEncode(regBody)
+  //   );
+  //
+  //   var jsonResponse = jsonDecode(response.body);
+  //   items = jsonResponse['success'];
+  //
+  //   setState(() {
+  //
+  //   });
+  // }
+  //
+  // void deleteItem(id) async{
+  //   var regBody = {
+  //     "id":id
+  //   };
+  //
+  //   var response = await http.post(Uri.parse(deleteTodo),
+  //       headers: {"Content-Type":"application/json"},
+  //       body: jsonEncode(regBody)
+  //   );
+  //
+  //   var jsonResponse = jsonDecode(response.body);
+  //   if(jsonResponse['status']){
+  //     getTodoList(userId);
+  //   }
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +203,7 @@ class _DashboardState extends State<Dashboard> {
                             borderRadius: BorderRadius.all(Radius.circular(10.0)))),
                   ).p4().px8(),
                   ElevatedButton(onPressed: (){
-                    addTodo();
+                    // addTodo();
                   }, child: Text("Add"))
                 ],
               )

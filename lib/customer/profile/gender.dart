@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 
 class GenderSelector extends StatefulWidget {
+  final void Function(String) onGenderChanged;
   const GenderSelector({
-    super.key,
+    super.key, required this.onGenderChanged,
   });
 
 
@@ -47,6 +48,7 @@ class _GenderSelectorState extends State<GenderSelector> {
         onChanged: (String? newValue) {
           setState(() {
             dropdownValue = newValue!;
+            widget.onGenderChanged(newValue!); // Pass the value to the callback function
           });
         },
       ),

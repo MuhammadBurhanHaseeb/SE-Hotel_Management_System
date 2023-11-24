@@ -13,6 +13,8 @@ class NameOfBooking extends StatefulWidget {
 
 class _NameOfBookingState extends State<NameOfBooking> {
   String selectedOption = 'Mr.';
+  String countrycode = '';
+  String phoneNumber = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +49,17 @@ class _NameOfBookingState extends State<NameOfBooking> {
           ),
           CustomTextField(hintText: "Full Name", onchangedFunction: (value) {},obscureTexthehe : false),
           CustomTextField(hintText: "Email", onchangedFunction: (value) {},obscureTexthehe : false),
-          SelectPhoneNo(),
+          SelectPhoneNo(
+            onCountryCodeChanged: (value) {
+            setState(() {
+              countrycode = value; // Update the selected gender in parent widget
+            });
+          },
+            onPhoneNoChanged: (value) {
+              setState(() {
+                phoneNumber = value; // Update the selected gender in parent widget
+              });
+            },),
           Spacer(),
           Padding(
             padding: const EdgeInsets.all(20.0),

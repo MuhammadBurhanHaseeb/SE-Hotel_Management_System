@@ -13,6 +13,8 @@ import 'package:flutter/services.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
 import 'package:hotel_app/nodejs_routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 
 class SignUpScreen extends StatefulWidget {
@@ -26,7 +28,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String email = '';
   String password = '' ;
   bool _isNotValidate = false;
-
+  late SharedPreferences prefs;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSharedPref();
+  }
+  void initSharedPref() async{
+    prefs = await SharedPreferences.getInstance();
+  }
   void registerUser() async{
     if(email.isNotEmpty && password.isNotEmpty){
       var regBody = {               //an object to send to backend
@@ -39,9 +50,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse['status']);
+
       if(jsonResponse['status']){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>CredentialsAfterSignUp()));
-      }else{
+        var myToken = jsonResponse['token'];
+        prefs.setString('token', myToken);
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>CredentialsAfterSignUp(token: myToken)));
+      }
+      else{
         showDialog(
             context: context,
             builder: (BuildContext context) {
