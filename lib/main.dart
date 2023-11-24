@@ -46,18 +46,20 @@ class _MyAppState extends State<MyApp> {
     getCredentialsFunction(userId);
   }
 
-  @override
+  // @override
   void getCredentialsFunction(userId) async {
-    var regBody = {"userId": userId};
     var response = await http.get(
       Uri.parse('$getCredentialss?userId=$userId'),
       headers: {"Content-Type": "application/json"},
     );
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
-    items = jsonResponse['success'].toString();
+    setState(() {
+      items = jsonResponse['success'].toString();
+    });
+
     print(items);
-    setState(() {});
+    //setState(() {});
   }
 
   Widget build(BuildContext context) {
@@ -67,11 +69,12 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: (widget.token != null &&
-                JwtDecoder.isExpired(widget.token) == false)
-            ? (items.isEmpty
-                ? CredentialsAfterSignUp(token: widget.token)
-                : FinalBottomNav())
-            : SplashScreen());
+        home:SplashScreen());
+        // home: (widget.token != null &&
+        //         JwtDecoder.isExpired(widget.token) == false)
+        //     ? (items.isEmpty
+        //         ? CredentialsAfterSignUp(token: widget.token)
+        //         : FinalBottomNav())
+        //     : SplashScreen());
   }
 }

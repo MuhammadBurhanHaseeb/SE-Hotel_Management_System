@@ -8,6 +8,7 @@ import '../customer/home/main_customer_home.dart';
 import '../customer/components/custom_textfield.dart';
 
 import 'dart:convert';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +24,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  late String userId;
+  String items = "";
   String email = '';
   String password = '';
   bool _isNotValidate = false;
@@ -35,6 +38,27 @@ class _SignInScreenState extends State<SignInScreen> {
   }
   void initSharedPref() async{
     prefs = await SharedPreferences.getInstance();
+  }
+
+  void getCredentialsFunction(userId,myToken) async {
+    var response = await http.get(
+      Uri.parse('$getCredentialss?userId=$userId'),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      items = jsonResponse['success'].toString();
+    });
+    print("inlogin    "+items);
+    if(items.isEmpty) {
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => CredentialsAfterSignUp(token: myToken)));
+    }
+    else{
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => FinalBottomNav()));
+    }
   }
   void loginUser() async{
     if(email.isNotEmpty && password.isNotEmpty){
@@ -54,7 +78,13 @@ class _SignInScreenState extends State<SignInScreen> {
         ///....... storing the token in shared prefrences is basically the remember logined info option = true
         var myToken = jsonResponse['token'];
         prefs.setString('token', myToken);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>CredentialsAfterSignUp(token: myToken)));
+        setState(() {
+          Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(myToken);
+          userId = jwtDecodedToken['_id'];
+        });
+        getCredentialsFunction(userId,myToken);
+
+
 
       }else{
         showDialog(
