@@ -45,7 +45,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
     Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
 
     userId = jwtDecodedToken['_id'];
-    // getTodoList(userId);
+    //getCredentialsFunction(userId);
   }
 
   void addCredentialsFunstion() async {
@@ -89,6 +89,8 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
       });
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
