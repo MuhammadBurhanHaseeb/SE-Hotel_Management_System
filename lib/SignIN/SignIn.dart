@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/SignIN/SignUPFolder/SignUp.dart';
 import 'package:hotel_app/SignIN/SignUPFolder/components/textbox.dart';
+import 'package:hotel_app/SignIN/SignUPFolder/credentials_after_signup.dart';
 
 import '../customer/components/final_bottom_bar.dart';
 import '../customer/home/main_customer_home.dart';
@@ -46,14 +47,14 @@ class _SignInScreenState extends State<SignInScreen> {
           body: jsonEncode(reqBody)
       );
       var jsonResponse = jsonDecode(response.body);
-      if(jsonResponse['status']){
 
+      if(jsonResponse['status']){
         ///....... this token contain the value of the current user who has logined and it is created in login function in user.controller.js file
         ///....... and we are using shared preferences that is helping us getting this token from user.controller.js file to local phone or using device
         ///....... storing the token in shared prefrences is basically the remember logined info option = true
         var myToken = jsonResponse['token'];
         prefs.setString('token', myToken);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(token: myToken)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>CredentialsAfterSignUp(token: myToken)));
 
       }else{
         showDialog(
@@ -157,7 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                     },
                     child: Text(
-                      "  Login  ",
+                      "Continue",
                       style: TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 17,

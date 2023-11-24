@@ -28,16 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String email = '';
   String password = '' ;
   bool _isNotValidate = false;
-  late SharedPreferences prefs;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initSharedPref();
-  }
-  void initSharedPref() async{
-    prefs = await SharedPreferences.getInstance();
-  }
+  
   void registerUser() async{
     if(email.isNotEmpty && password.isNotEmpty){
       var regBody = {               //an object to send to backend
@@ -52,9 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       print(jsonResponse['status']);
 
       if(jsonResponse['status']){
-        var myToken = jsonResponse['token'];
-        prefs.setString('token', myToken);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>CredentialsAfterSignUp(token: myToken)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInScreen(isCustomer: true,)));
       }
       else{
         showDialog(

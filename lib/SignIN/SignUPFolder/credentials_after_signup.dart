@@ -49,6 +49,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
   }
 
   void addCredentialsFunstion() async {
+    print(userId+"  "+fullName+"  "+cnic+"  "+selectedDate.toString()+"  "+gender+"  "+countrycode+"  "+phoneNumber);
     if (userId.isNotEmpty &&
         fullName.isNotEmpty &&
         cnic.isNotEmpty &&
@@ -60,7 +61,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
         "userId": userId,
         "fullName": fullName,
         "cnic": cnic,
-        "dateOfBirth": selectedDate,
+        "dateOfBirth": selectedDate?.toIso8601String(),
         "gender": gender,
         "countryCode": countrycode,
         "phoneNo": phoneNumber,
@@ -78,7 +79,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SignInScreen(isCustomer: true)));
+                builder: (context) => FinalBottomNav()));
       } else {
         print("SomeThing Went Wrong");
       }
@@ -205,13 +206,10 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
                       ]),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FinalBottomNav()));
+                      addCredentialsFunstion();
                     },
                     child: Text(
-                      "Sign Up",
+                      "Let's begin",
                       style: TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 17,
@@ -223,7 +221,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
                       elevation: MaterialStateProperty.all(50),
                       padding: MaterialStateProperty.all<EdgeInsets>(
                           EdgeInsets.only(
-                              top: 15, bottom: 15, left: 134, right: 134)),
+                              top: 15, bottom: 15, left: 124, right: 124)),
                       //backgroundColor: MaterialStateProperty.all<Color>(Color(0xffA0DAFB))
                     ),
                   ),

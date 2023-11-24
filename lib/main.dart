@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/splash/splash_screen.dart';
+import 'SignIN/SignUPFolder/credentials_after_signup.dart';
 import 'customer/components/final_bottom_bar.dart';
 import 'customer/home/main_customer_home.dart';
 import 'customer/profile/ph_no.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-        home: (token != null && JwtDecoder.isExpired(token) == false )?Dashboard(token: token):SplashScreen()
+        home: (token != null && JwtDecoder.isExpired(token) == false )?CredentialsAfterSignUp(token: token):SplashScreen()
     );
   }
 }

@@ -16,18 +16,24 @@ class SelectPhoneNo extends StatefulWidget {
 
 class _SelectPhoneNoState extends State<SelectPhoneNo> {
   late String myCountryCode = 'PK'; // instead of PK you will add here customer.countrycode
+  String phoneNo ='';
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
+      initialValue: phoneNo.isEmpty ? '' : phoneNo,
+      //errorTexi: _isNotValidate ? "Enter proper info" : null,
        obscureTexthehe : false,
         hintText: "Phone Number",
         onchangedFunction: (value) {
+        phoneNo = value;
           widget.onPhoneNoChanged(value!);
         },
         prefixWidget: CountryCodePicker(
           onChanged: (CountryCode){
-            myCountryCode= CountryCode.toString();
-            widget.onCountryCodeChanged(CountryCode.toString()!);
+            setState(() {
+              myCountryCode= CountryCode.toString();
+              widget.onCountryCodeChanged(myCountryCode!);
+            });
             //print(myCountryCode);
           },
           // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
