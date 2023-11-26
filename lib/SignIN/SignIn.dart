@@ -71,7 +71,6 @@ class _SignInScreenState extends State<SignInScreen> {
           body: jsonEncode(reqBody)
       );
       var jsonResponse = jsonDecode(response.body);
-
       if(jsonResponse['status']){
         ///....... this token contain the value of the current user who has logined and it is created in login function in user.controller.js file
         ///....... and we are using shared preferences that is helping us getting this token from user.controller.js file to local phone or using device
@@ -81,6 +80,7 @@ class _SignInScreenState extends State<SignInScreen> {
         setState(() {
           Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(myToken);
           userId = jwtDecodedToken['_id'];
+          print(userId);
         });
         getCredentialsFunction(userId,myToken);
 

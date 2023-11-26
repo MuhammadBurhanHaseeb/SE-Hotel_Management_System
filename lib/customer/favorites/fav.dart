@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 import '../home/rooms_in_category.dart';
@@ -47,6 +49,7 @@ class FavouritesPage extends StatelessWidget {
             //   height: size.height * 0.06,
             // ),
             RoomsInCategory(
+              isInFavScreen: true,
               buttonbackColor: Color(0xFF17203A),
               icon_req: ImageIcon(
                 AssetImage("assets/images/filledheart.png"),

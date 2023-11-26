@@ -4,12 +4,18 @@ import '../currentroom.dart';
 import '../customerBL/housesBL.dart';
 import 'view_room_components/view_room.dart';
 
-class RoomsInCategory extends StatelessWidget {
+class RoomsInCategory extends StatefulWidget {
+  final bool isInFavScreen;
   final Color buttonbackColor;
   final Widget icon_req;
   final List<HouseTrailers> houses;
-  const RoomsInCategory({Key? key, required this.houses, required this.icon_req, required this.buttonbackColor}) : super(key: key);
+  const RoomsInCategory({Key? key, required this.houses, required this.icon_req, required this.buttonbackColor, required this.isInFavScreen}) : super(key: key);
 
+  @override
+  State<RoomsInCategory> createState() => _RoomsInCategoryState();
+}
+
+class _RoomsInCategoryState extends State<RoomsInCategory> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -20,10 +26,10 @@ class RoomsInCategory extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(), // Disable scrolling for the ListView
         shrinkWrap: true,
         //...
-        itemCount: houses.length,
+        itemCount: widget.houses.length,
         itemBuilder: (context, index) {
           // Get the current house.
-          final house = houses[index];
+          final house = widget.houses[index];
 
           // Return a list item for the house.
           return Stack(
@@ -118,25 +124,33 @@ class RoomsInCategory extends StatelessWidget {
                   width: size.width*0.07,
                   child: IconButton(
                     onPressed: (){
-                      currentOrderGloabl.name = house.name;
-                      currentOrderGloabl.price = house.price;
-                      currentOrderGloabl.bedrooms = house.bedrooms;
-                      currentOrderGloabl.bathrooms= house.bathrooms;
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                          ViewRoomPage(
-                            currentRoomName: house.name,
-                            roomFirstPicture: " ",
-                            currentRoomPrice: house.price,
-                            bedrooms: house.bedrooms,
-                            bathrooms: house.bathrooms,
-                            roomSize: house.size,
-                          )
-                      ));
+                      if(widget.isInFavScreen)
+                        {
+                          //remove current house from the fav list
+                          print("remove current house from the fav list");
+                        }
+                      else {
+                        currentOrderGloabl.name = house.name;
+                        currentOrderGloabl.price = house.price;
+                        currentOrderGloabl.bedrooms = house.bedrooms;
+                        currentOrderGloabl.bathrooms = house.bathrooms;
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) =>
+                                ViewRoomPage(
+                                  currentRoomName: house.name,
+                                  roomFirstPicture: " ",
+                                  currentRoomPrice: house.price,
+                                  bedrooms: house.bedrooms,
+                                  bathrooms: house.bathrooms,
+                                  roomSize: house.size,
+                                )
+                        ));
+                      }
                     },
-                    icon:icon_req,
+                    icon:widget.icon_req,
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0.0)),
-                      backgroundColor: MaterialStateProperty.all<Color>(buttonbackColor),
+                      backgroundColor: MaterialStateProperty.all<Color>(widget.buttonbackColor),
                     ),
                   ),
                 ),

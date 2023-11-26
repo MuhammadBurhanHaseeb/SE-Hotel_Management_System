@@ -69,12 +69,12 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home:SplashScreen());
-        // home: (widget.token != null &&
-        //         JwtDecoder.isExpired(widget.token) == false)
-        //     ? (items.isEmpty
-        //         ? CredentialsAfterSignUp(token: widget.token)
-        //         : FinalBottomNav())
-        //     : SplashScreen());
+        //home:SplashScreen());
+        home: (widget.token != null &&
+                JwtDecoder.isExpired(widget.token) == false)
+            ? (items.isEmpty
+                ? CredentialsAfterSignUp(token: widget.token)
+                : FinalBottomNav())
+            : SplashScreen());
   }
 }

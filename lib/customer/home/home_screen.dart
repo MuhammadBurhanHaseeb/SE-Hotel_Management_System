@@ -40,6 +40,7 @@ class HomePage extends StatelessWidget {
                 RoomTypesCard(),
                 //RoomsOptions(size: size),
                 RoomsInCategory(
+                  isInFavScreen: false,
                   buttonbackColor: Colors.transparent,
                   icon_req: Icon(
                       Icons.remove_red_eye,

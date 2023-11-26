@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
+import 'dart:convert';
 class RoomTypesCard extends StatefulWidget {
   const RoomTypesCard({Key? key}) : super(key: key);
 
@@ -8,18 +11,36 @@ class RoomTypesCard extends StatefulWidget {
 }
 
 class _RoomTypesCardState extends State<RoomTypesCard> {
-  List<String> room_categories = [
-    "Standard Rooms",
-    "Suites",
-    "Deluxe Rooms",
-    "Family Rooms",
-    "Connecting Rooms",
-    "Penthouse",
-    "Business Rooms",
-    "Event Rooms"
-  ];
+  List room_categories = [];
   int selectedIndex = 0;
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCategoriesFunction();
+  }
+
+  // @override
+  void getCategoriesFunction() async {
+    var response = await http.get(
+      Uri.parse(getCategories),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      room_categories = jsonResponse['success'];
+    });
+    if(room_categories.isNotEmpty) {
+      print(room_categories);
+    }
+    else
+      {
+        print("roomcategories EMPTY");
+      }
+    //setState(() {});
+  }
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -92,7 +113,7 @@ class _RoomTypesCardState extends State<RoomTypesCard> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Text(
-          room_categories[index],
+          room_categories[index]['name'].toString(),
           style: TextStyle(
             //fontWeight: FontWeight.bold,
             color: selectedIndex == index ? Colors.white : Colors.grey,
