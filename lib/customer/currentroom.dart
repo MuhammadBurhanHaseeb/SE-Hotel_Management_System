@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CurrentOrderInfo{
   String name;
-  int price;
+  num price;
   int bedrooms;
   int bathrooms;
   String checkIn;
   String checkOut;
   int noOfDays;
-  int totalPrice;
+  num totalPrice;
   int noOfGuests;
 
   CurrentOrderInfo(this.name,this.price,this.bedrooms,this.bathrooms,this.checkIn,this.checkOut,this.noOfDays,this.totalPrice,this.noOfGuests);

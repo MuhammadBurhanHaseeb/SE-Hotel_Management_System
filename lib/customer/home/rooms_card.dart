@@ -4,13 +4,15 @@ import 'package:http/http.dart' as http;
 import 'package:hotel_app/nodejs_routes.dart';
 import 'dart:convert';
 class RoomTypesCard extends StatefulWidget {
-  const RoomTypesCard({Key? key}) : super(key: key);
+  final Function(String) currentCategoryId;
+  const RoomTypesCard({Key? key, required this.currentCategoryId}) : super(key: key);
 
   @override
   State<RoomTypesCard> createState() => _RoomTypesCardState();
 }
 
 class _RoomTypesCardState extends State<RoomTypesCard> {
+  late String categoryId;
   List room_categories = [];
   int selectedIndex = 0;
   @override
@@ -30,9 +32,12 @@ class _RoomTypesCardState extends State<RoomTypesCard> {
     print(jsonResponse);
     setState(() {
       room_categories = jsonResponse['success'];
+      categoryId = room_categories[selectedIndex]['_id'].toString();
     });
     if(room_categories.isNotEmpty) {
       print(room_categories);
+      widget.currentCategoryId(categoryId);
+      print("CURRENT CATEGORY: " + categoryId);
     }
     else
       {
@@ -60,9 +65,14 @@ class _RoomTypesCardState extends State<RoomTypesCard> {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
+
         setState(() {
           selectedIndex = index;
+          categoryId = room_categories[index]['_id'].toString(); // Fetch the ID
+          //widget.currentCategoryId(room_categories[selectedIndex]['id'].toString());
         });
+        widget.currentCategoryId(categoryId);
+        print("CURRENT CATEGORY: " + categoryId);
       },
       child: Container(
         height: size.height * 0.06, //50

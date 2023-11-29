@@ -10,20 +10,10 @@ import 'reviews.dart';
 import 'room_images.dart';
 
 class ViewRoomPage extends StatefulWidget {
-  final currentRoomName;
-  final roomFirstPicture;
-  final int currentRoomPrice;
-  final int bedrooms;
-  final int bathrooms;
-  final int roomSize;
+  final currentRoom;
   const ViewRoomPage({
     Key? key,
-    this.currentRoomName,
-    this.roomFirstPicture,
-    required this.currentRoomPrice,
-    required this.bedrooms,
-    required this.bathrooms,
-    required this.roomSize,
+    required this.currentRoom,
   }) : super(key: key);
 
   @override
@@ -32,6 +22,9 @@ class ViewRoomPage extends StatefulWidget {
 
 class _ViewRoomPageState extends State<ViewRoomPage> {
   bool reviewsVisible = false;
+
+  String roomFirstPicture =  " ";
+
 
   //final ScrollController _scrollController = ScrollController(); ...not working
   // @override
@@ -56,7 +49,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                 SizedBox(
                   height: size.height * 0.07,
                 ),
-                MainImageInViewRoom(currentRoomName: widget.currentRoomName),
+                MainImageInViewRoom(currentRoomName: widget.currentRoom['roomName'].toString(),currentFloorNo: widget.currentRoom['floorNo']),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: ViewRoomHeadingStyle(
@@ -66,7 +59,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: ReadMoreText(
-                    'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
+                    widget.currentRoom['description'],
                     trimLines: 2,
                     textAlign: TextAlign.justify,
                     trimMode: TrimMode.Line,
@@ -102,14 +95,14 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: DetailsBlock(
-                      bedrooms: widget.bedrooms,
-                      bathrooms: widget.bathrooms,
-                      roomSize: widget.roomSize),
+                      bedrooms: widget. currentRoom['beds'],
+                      bathrooms: widget.currentRoom['bathrooms'],
+                      roomSize: widget.currentRoom['size']),
                 ),
                 ViewRoomHeadingStyle(
                   heading: "Facilities",
                 ),
-                FacilitiesBlock(size: size),
+                FacilitiesBlock(size: size,faclitiesIds: widget.currentRoom['facilities'],),
                 Row(
                   children: [
                     ViewRoomHeadingStyle(heading: "Reviews"),
@@ -176,7 +169,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
           color: Colors.white,
           child: Row(
             children: [
-              Text("\$${widget.currentRoomPrice.toString()}",style: TextStyle(
+              Text("\$${widget.currentRoom['price'].toString()}",style: TextStyle(
                 fontFamily: "Poppins",
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -210,7 +203,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => SelectDateForBooking(
-                      currentRoomPrice: widget.currentRoomPrice,
+                      currentRoomPrice: widget.currentRoom['price'],
                     )
                     ));
                   },

@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'booking_name.dart';
 
 class SelectDateForBooking extends StatefulWidget {
-  final int currentRoomPrice;
+  final num currentRoomPrice;
   const SelectDateForBooking({Key? key, required this.currentRoomPrice}) : super(key: key);
 
   @override

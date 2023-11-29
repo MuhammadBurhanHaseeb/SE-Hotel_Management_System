@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 class MainImageInViewRoom extends StatelessWidget {
   const MainImageInViewRoom({
     super.key,
-    required this.currentRoomName,
+    required this.currentRoomName, required this.currentFloorNo,
   });
 
   final String currentRoomName;
+  final String currentFloorNo;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +102,7 @@ class MainImageInViewRoom extends StatelessWidget {
                         color: Color(0xffA0DAFB),
                       ),
                       Text(
-                        "3rd floor",
+                        currentFloorNo + " floor",
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: "Poppins",

@@ -56,7 +56,7 @@ class FavouritesPage extends StatelessWidget {
                 color: Colors.white,
                 size: size.height * 0.02,//10
               ),
-              houses: [
+              rooms: [
                 HouseTrailers(
                     name: 'Orchad House',
                     price: 2500000000,

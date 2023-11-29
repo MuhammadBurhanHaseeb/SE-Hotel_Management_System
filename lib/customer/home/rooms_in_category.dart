@@ -8,8 +8,8 @@ class RoomsInCategory extends StatefulWidget {
   final bool isInFavScreen;
   final Color buttonbackColor;
   final Widget icon_req;
-  final List<HouseTrailers> houses;
-  const RoomsInCategory({Key? key, required this.houses, required this.icon_req, required this.buttonbackColor, required this.isInFavScreen}) : super(key: key);
+  final List rooms;
+  const RoomsInCategory({Key? key, required this.rooms, required this.icon_req, required this.buttonbackColor, required this.isInFavScreen}) : super(key: key);
 
   @override
   State<RoomsInCategory> createState() => _RoomsInCategoryState();
@@ -26,10 +26,10 @@ class _RoomsInCategoryState extends State<RoomsInCategory> {
         physics: NeverScrollableScrollPhysics(), // Disable scrolling for the ListView
         shrinkWrap: true,
         //...
-        itemCount: widget.houses.length,
+        itemCount: widget.rooms.length,
         itemBuilder: (context, index) {
           // Get the current house.
-          final house = widget.houses[index];
+          final currentRoom = widget.rooms[index];
 
           // Return a list item for the house.
           return Stack(
@@ -57,7 +57,7 @@ class _RoomsInCategoryState extends State<RoomsInCategory> {
                   ),
                 ),
                 title: Text(
-                  house.name,
+                  currentRoom['roomName'].toString(),
                   style: TextStyle(
                     fontFamily: "Poppins",
                     color: Color(0xFF17203A),
@@ -71,7 +71,7 @@ class _RoomsInCategoryState extends State<RoomsInCategory> {
                       height: size.height * 0.003,
                     ),
                     Text(
-                      '\$${house.price.toString()} / day',
+                      '\$${currentRoom['price'].toString()} / day',
                       style: TextStyle(
                         color: Color(0xff0A8ED9),
                         fontFamily: "PoppinsThin",
@@ -90,7 +90,7 @@ class _RoomsInCategoryState extends State<RoomsInCategory> {
                           color: Colors.grey,
                         ),
                         Text(
-                          '${house.bedrooms.toString()} Bedroom',
+                          '${currentRoom['beds'].toString()} Bedroom',
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: "PoppinsThin",
@@ -103,7 +103,7 @@ class _RoomsInCategoryState extends State<RoomsInCategory> {
                           color: Colors.grey,
                         ),
                         Text(
-                          '${house.bedrooms.toString()} Bathroom',
+                          '${currentRoom['bathrooms'].toString()} Bathroom',
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: "PoppinsThin",
@@ -130,19 +130,14 @@ class _RoomsInCategoryState extends State<RoomsInCategory> {
                           print("remove current house from the fav list");
                         }
                       else {
-                        currentOrderGloabl.name = house.name;
-                        currentOrderGloabl.price = house.price;
-                        currentOrderGloabl.bedrooms = house.bedrooms;
-                        currentOrderGloabl.bathrooms = house.bathrooms;
+                        currentOrderGloabl.name = currentRoom['roomName'].toString();
+                        currentOrderGloabl.price = currentRoom['price'];
+                        currentOrderGloabl.bedrooms = currentRoom['beds'];
+                        currentOrderGloabl.bathrooms = currentRoom['bathrooms'];
                         Navigator.push(context, MaterialPageRoute(
                             builder: (context) =>
                                 ViewRoomPage(
-                                  currentRoomName: house.name,
-                                  roomFirstPicture: " ",
-                                  currentRoomPrice: house.price,
-                                  bedrooms: house.bedrooms,
-                                  bathrooms: house.bathrooms,
-                                  roomSize: house.size,
+                                  currentRoom: currentRoom,
                                 )
                         ));
                       }

@@ -6,10 +6,49 @@ import 'rooms_card.dart';
 import 'rooms_in_category.dart';
 import 'search.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
+import 'dart:convert';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String selectedCategoryId = '';
+  List roomsInCurrentCategory= [];
+  @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   getRoomsInCurrentCategoryFunction();
+  // }
+
+  // @override
+  void getRoomsInCurrentCategoryFunction() async {
+    var response = await http.get(
+      Uri.parse('$getRoomsInACategory?categoryId=$selectedCategoryId'),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      roomsInCurrentCategory = jsonResponse['success'];
+    });
+    if(roomsInCurrentCategory.isNotEmpty) {
+      print(roomsInCurrentCategory);
+    }
+    else
+    {
+      print("rooms EMPTY");
+    }
+    //setState(() {});
+  }
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -37,7 +76,15 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 SearchOption(press:(){}),
-                RoomTypesCard(),
+                RoomTypesCard(
+                  currentCategoryId: (value){
+                    print(value);
+                    setState(() {
+                      selectedCategoryId = value;
+                      getRoomsInCurrentCategoryFunction();
+                    });
+                  },
+                ),
                 //RoomsOptions(size: size),
                 RoomsInCategory(
                   isInFavScreen: false,
@@ -47,15 +94,16 @@ class HomePage extends StatelessWidget {
                       color: Color(0xffA0DAFB),//Colors.white, // Initial icon color (black)
                       size: size.height * 0.02,//10
                     ),
-                  houses: [
-                    HouseTrailers(name: 'Orchad House', price: 4500, bedrooms: 6, bathrooms: 4,size: 6000),
-                    HouseTrailers(name: 'House', price: 5000, bedrooms: 6, bathrooms: 4,size: 1000),
-                    HouseTrailers(
-                        name: 'The Hollies House',
-                        price: 10000,
-                        bedrooms: 5,
-                        bathrooms: 2,size: 4000),
-                  ],
+                  rooms: roomsInCurrentCategory,
+                  // houses: [
+                  //   HouseTrailers(name: 'Orchad House', price: 4500, bedrooms: 6, bathrooms: 4,size: 6000),
+                  //   HouseTrailers(name: 'House', price: 5000, bedrooms: 6, bathrooms: 4,size: 1000),
+                  //   HouseTrailers(
+                  //       name: 'The Hollies House',
+                  //       price: 10000,
+                  //       bedrooms: 5,
+                  //       bathrooms: 2,size: 4000),
+                  // ],
                 ),
 
         //         Padding(
