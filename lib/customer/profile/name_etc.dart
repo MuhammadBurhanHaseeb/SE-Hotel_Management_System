@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'profile_pic.dart';
 
 class ProfileFirstInfo extends StatelessWidget {
+  final String userName;
+  final String userEmail;
   const ProfileFirstInfo({
-    super.key,
+    super.key, required this.userName, required this.userEmail,
   });
 
   @override
@@ -18,7 +20,7 @@ class ProfileFirstInfo extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 14.0),
               child: Text(
-                "Louis Pastridge",
+                userName,
                 style: TextStyle(
                   fontFamily: "Poppins",
                   fontWeight: FontWeight.bold,
@@ -29,7 +31,7 @@ class ProfileFirstInfo extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 6.0),
               child: Text(
-                "LouisPastridge123@gmail.com",
+                userEmail,
                 style: TextStyle(
                   fontFamily: "Poppins",
                   fontSize: 14,

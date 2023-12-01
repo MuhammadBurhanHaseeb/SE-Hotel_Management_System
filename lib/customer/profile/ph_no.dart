@@ -6,18 +6,26 @@ import '../components/custom_textfield.dart';
 
 
 class SelectPhoneNo extends StatefulWidget {
+  final String PhoneNo;
+  final String CountryCode;
   final void Function(String) onPhoneNoChanged;
   final void Function(String) onCountryCodeChanged;
-  const SelectPhoneNo({Key? key, required this.onPhoneNoChanged, required this.onCountryCodeChanged}) : super(key: key);
+  const SelectPhoneNo({Key? key, required this.onPhoneNoChanged, required this.onCountryCodeChanged, required this.PhoneNo, required this.CountryCode}) : super(key: key);
 
   @override
   State<SelectPhoneNo> createState() => _SelectPhoneNoState();
 }
 
 class _SelectPhoneNoState extends State<SelectPhoneNo> {
-  late String myCountryCode = 'PK'; // instead of PK you will add here customer.countrycode
+  late String myCountryCode = ''; // instead of PK you will add here customer.countrycode
   String phoneNo ='';
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    phoneNo = widget.PhoneNo;
+    myCountryCode = widget.CountryCode;
+  }
   Widget build(BuildContext context) {
     return CustomTextField(
       initialValue: phoneNo.isEmpty ? '' : phoneNo,

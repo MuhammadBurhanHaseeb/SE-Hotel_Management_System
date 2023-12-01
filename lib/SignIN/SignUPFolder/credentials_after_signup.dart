@@ -79,7 +79,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => FinalBottomNav()));
+                builder: (context) => FinalBottomNav(UserId: userId,)));
       } else {
         print("SomeThing Went Wrong");
       }
@@ -168,6 +168,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
               Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 10),
                 child: GenderSelector(
+                  Gender: "",
                   onGenderChanged: (value) {
                     setState(() {
                       gender =
@@ -179,6 +180,8 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
               Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 10),
                 child: SelectPhoneNo(
+                  CountryCode: "",
+                  PhoneNo: "",
                   onCountryCodeChanged: (value) {
                     setState(() {
                       countrycode =

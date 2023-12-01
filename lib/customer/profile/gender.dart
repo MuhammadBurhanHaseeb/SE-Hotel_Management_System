@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 
 class GenderSelector extends StatefulWidget {
+  final Gender;
   final void Function(String) onGenderChanged;
   const GenderSelector({
-    super.key, required this.onGenderChanged,
+    super.key, required this.onGenderChanged, required this.Gender,
   });
 
 
@@ -13,8 +14,13 @@ class GenderSelector extends StatefulWidget {
 }
 
 class _GenderSelectorState extends State<GenderSelector> {
-  String dropdownValue = "Male";
+  String dropdownValue = "";
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dropdownValue = widget.Gender;
+  }
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),

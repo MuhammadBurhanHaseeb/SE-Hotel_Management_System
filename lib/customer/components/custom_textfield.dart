@@ -28,7 +28,7 @@ class CustomTextField extends StatelessWidget {
           hintStyle: TextStyle(
             fontFamily: "Poppins",
             fontSize: 17,
-            color: Color(0xFF17203A),
+            color: Colors.grey,
           ),
           filled: true,
           fillColor: Color(0xffFBFBFB),

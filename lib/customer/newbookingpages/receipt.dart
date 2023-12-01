@@ -184,7 +184,7 @@ class _FinalReceiptState extends State<FinalReceipt> {
                     ]),
                 child: TextButton(
                   onPressed: ()  {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => FinalBottomNav()));
+                    ///Navigator.push(context, MaterialPageRoute(builder: (context) => FinalBottomNav()));
                   },
                   child: Text(
                     "Back to home",

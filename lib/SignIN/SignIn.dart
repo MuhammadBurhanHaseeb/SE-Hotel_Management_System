@@ -57,7 +57,7 @@ class _SignInScreenState extends State<SignInScreen> {
     }
     else{
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => FinalBottomNav()));
+          builder: (context) => FinalBottomNav(UserId: userId,)));
     }
   }
   void loginUser() async{

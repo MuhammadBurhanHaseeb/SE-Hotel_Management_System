@@ -50,6 +50,8 @@ class _NameOfBookingState extends State<NameOfBooking> {
           CustomTextField(hintText: "Full Name", onchangedFunction: (value) {},obscureTexthehe : false),
           CustomTextField(hintText: "Email", onchangedFunction: (value) {},obscureTexthehe : false),
           SelectPhoneNo(
+            CountryCode: "",
+            PhoneNo: "",
             onCountryCodeChanged: (value) {
             setState(() {
               countrycode = value; // Update the selected gender in parent widget

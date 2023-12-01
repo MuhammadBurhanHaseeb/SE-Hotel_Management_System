@@ -8,20 +8,34 @@ import '../home/main_customer_home.dart';
 import '../profile/profile_page.dart';
 
 class FinalBottomNav extends StatefulWidget {
+  final String UserId;
+
+  const FinalBottomNav({
+    super.key,
+    required this.UserId,
+  });
   @override
-  _FinalBottomNavState createState() => _FinalBottomNavState();
+  State<FinalBottomNav> createState() => _FinalBottomNavState();
+
+  //_FinalBottomNavState createState() => _FinalBottomNavState();
 }
 
 class _FinalBottomNavState extends State<FinalBottomNav> {
   int _selectedIndex = 0;
   // static const TextStyle optionStyle =
   // TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
-  static const List<Widget> _widgetOptions = <Widget>[
-  MainCustomerHomeScreen(),
-  FavouritesPage(),
-  BookingHistory(),
-  ProfilePage(),
-  ];
+  late List<Widget> _widgetOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = <Widget>[
+      MainCustomerHomeScreen(),
+      FavouritesPage(),
+      BookingHistory(),
+      ProfilePage(UserIdp: widget.UserId),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

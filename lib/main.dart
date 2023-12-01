@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                 JwtDecoder.isExpired(widget.token) == false)
             ? (items.isEmpty
                 ? CredentialsAfterSignUp(token: widget.token)
-                : FinalBottomNav())
+                : FinalBottomNav(UserId: userId,))
             : SplashScreen());
   }
 }

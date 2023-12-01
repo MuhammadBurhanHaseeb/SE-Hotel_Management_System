@@ -5,11 +5,59 @@ import 'edit_pro_page.dart';
 import 'name_etc.dart';
 import 'payment.dart';
 import 'profile_pic.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  final String UserIdp;
+  const ProfilePage({Key? key, required this.UserIdp}) : super(key: key);
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  var userCredentials;
+  var user;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCredentialsFunction(widget.UserIdp);
+    getUserByIdFunction(widget.UserIdp);
+  }
+
+  void getCredentialsFunction(userId) async {
+    var response = await http.get(
+      Uri.parse('$getCredentialss?userId=$userId'),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      userCredentials = jsonResponse['success'];
+    });
+    print("profile    "+userCredentials.toString());
+  }
+
+  void getUserByIdFunction(id) async {
+    print("ID"+ id);
+    var reqBody = {
+      "id":id,
+    };
+    var response = await http.post(Uri.parse(getUserById),
+        headers: {"Content-Type":"application/json"},
+        body: jsonEncode(reqBody)
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      user = jsonResponse['success'];
+    });
+    print("main Info    "+user.toString());
+  }
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -37,7 +85,7 @@ class ProfilePage extends StatelessWidget {
               ),
           //   ],
           // ),
-          ProfileFirstInfo(),
+          ProfileFirstInfo(userEmail: user != null ? user['email'].toString() : '',userName:  userCredentials != null ? userCredentials[0]['fullName'].toString() : '',),
           SizedBox(
             height: size.height*0.037,
           ),
@@ -46,7 +94,7 @@ class ProfilePage extends StatelessWidget {
             optionText: "Edit Profile",
               textColor:Colors.black,
             press: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(User: user,UserCredentials: userCredentials,)));
             },
           ),
           Options(

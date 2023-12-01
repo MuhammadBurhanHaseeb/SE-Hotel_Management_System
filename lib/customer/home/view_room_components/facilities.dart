@@ -39,6 +39,7 @@ class _FacilitiesBlockState extends State<FacilitiesBlock> {
 
   // @override
   void getFacilitiesContentFunction() async {
+    List<dynamic> allFacilitiesContent = [];
     List hehe = widget.faclitiesIds;
     for(int i=0 ; i<hehe.length ; i++) {
       var facId=hehe[i];
@@ -48,10 +49,15 @@ class _FacilitiesBlockState extends State<FacilitiesBlock> {
       );
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
+      // setState(() {
+        // facilitiesContent = jsonResponse['success'];
+        allFacilitiesContent.addAll(jsonResponse['success']);
+      // });
       setState(() {
-        facilitiesContent = jsonResponse['success'];
+        facilitiesContent = allFacilitiesContent;
       });
     }
+
   }
   Widget build(BuildContext context) {
     print("FACILITIES"+"${widget.faclitiesIds}");

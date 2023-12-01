@@ -5,7 +5,9 @@ import 'gender.dart';
 import 'ph_no.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+  final UserCredentials;
+  final User;
+  const EditProfilePage({Key? key, required this.UserCredentials, required this.User}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -15,12 +17,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String gender = '';
   String countrycode = '';
   String phoneNumber = '';
-  DateTime? selectedDate = null; // Add this line to store the selected date
+  DateTime? selectedDate = null; // line to store the selected date
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    String dateOfBirthString = widget.UserCredentials[0]['dateOfBirth'];
+    selectedDate = DateTime.parse(dateOfBirthString);
+    //selectedDate = widget.UserCredentials[0]['dateOfBirth'];
+  }
+
   String formatDate(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString()}";
   }
-  @override
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -70,8 +79,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ],
             ),
-            CustomTextField(hintText: "Full Name", onchangedFunction: (value) {},obscureTexthehe : false),
-            CustomTextField(hintText: "CNIC", onchangedFunction: (value) {},obscureTexthehe : false),
+            CustomTextField(initialValue: widget.UserCredentials[0]['fullName'],hintText: "Full Name", onchangedFunction: (value) {},obscureTexthehe : false),
+            CustomTextField(initialValue: widget.UserCredentials[0]['cnic'],hintText: "CNIC", onchangedFunction: (value) {},obscureTexthehe : false),
             CustomTextField(
               initialValue: selectedDate != null ? formatDate(selectedDate!) : '',
               hintText: "Date of Birth",
@@ -86,6 +95,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               },
             ),
             GenderSelector(
+              Gender: widget.UserCredentials[0]['gender'],
               onGenderChanged: (value) {
                 setState(() {
                   gender = value; // Update the selected gender in parent widget
@@ -93,6 +103,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               },
             ),
             SelectPhoneNo(
+              PhoneNo: widget.UserCredentials[0]['phoneNo'],
+              CountryCode: widget.UserCredentials[0]['countryCode'],
               onCountryCodeChanged: (value) {
                 setState(() {
                   countrycode = value; // Update the selected gender in parent widget
@@ -104,8 +116,54 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 });
               },
             ),
-            CustomTextField(hintText: "Email", onchangedFunction: (value) {},obscureTexthehe : false),
-            CustomTextField(hintText: "Password", onchangedFunction: (value) {},obscureTexthehe : true),
+            Padding(
+                padding: const EdgeInsets.only(top:20.0,left: 20,right: 20),
+              child: Container(
+                width: size.width,
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Color(0xffFBFBFB),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 1.0, // Adjust the width as needed
+                  ),
+                ),
+                child: Text(
+                    widget.User['email'],
+                  style: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 17,
+                    color: Color(0xFF17203A),
+                  ),
+                ),
+              ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(top:20.0,left: 20,right: 20),
+            //   child: Container(
+            //     width: size.width,
+            //     padding: const EdgeInsets.all(15),
+            //     decoration: BoxDecoration(
+            //       color: Color(0xffFBFBFB),
+            //       borderRadius: BorderRadius.circular(10),
+            //       border: Border.all(
+            //         color: Colors.white,
+            //         width: 1.0, // Adjust the width as needed
+            //       ),
+            //     ),
+            //     child: Text(
+            //       widget.User['password'],
+            //       style: TextStyle(
+            //         fontFamily: "Poppins",
+            //         fontSize: 17,
+            //         color: Color(0xFF17203A),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            ///CustomTextField(initialValue:widget.User['email'],hintText: "Email".toString(), onchangedFunction: (value) {},obscureTexthehe : false),
+            ///CustomTextField(initialValue:widget.User['password'],hintText: "Email".toString(), onchangedFunction: (value) {},obscureTexthehe : true),
 
 
             Padding(
