@@ -7,8 +7,11 @@ final getUserById = url + 'getUserById';
 final addCredentials = url + 'createCredentials';
 final getCredentialss = url + 'getCredentials';
 final deleteCredentials = url + 'deleteCredentials';
+final addProfilePic = url + 'addProfilePicToCredentials';
+final getProfilePic = url + 'getProfilePic';
 
 final getCategories = url + 'getRoomCategories';
 
 final getRoomsInACategory = url + 'getRoomsInCategory';
 final getfacilitiesInfoById = url + 'getFacilityLookUpValuesById';
+

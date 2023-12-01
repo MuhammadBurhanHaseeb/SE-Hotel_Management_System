@@ -85,7 +85,12 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
           //   ],
           // ),
-          ProfileFirstInfo(userEmail: user != null ? user['email'].toString() : '',userName:  userCredentials != null ? userCredentials[0]['fullName'].toString() : '',),
+          ProfileFirstInfo(
+            userEmail: user != null ? user['email'].toString() : '',
+            userName:  userCredentials != null ? userCredentials[0]['fullName'].toString() : '',
+            userId: widget.UserIdp,
+            userPicture: userCredentials[0]['profilePicture'].toString(),
+          ),
           SizedBox(
             height: size.height*0.037,
           ),

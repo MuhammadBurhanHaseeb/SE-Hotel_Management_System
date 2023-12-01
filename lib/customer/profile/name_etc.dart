@@ -5,8 +5,10 @@ import 'profile_pic.dart';
 class ProfileFirstInfo extends StatelessWidget {
   final String userName;
   final String userEmail;
+  final String userId;
+  final String userPicture;
   const ProfileFirstInfo({
-    super.key, required this.userName, required this.userEmail,
+    super.key, required this.userName, required this.userEmail, required this.userId, required this.userPicture,
   });
 
   @override
@@ -16,7 +18,7 @@ class ProfileFirstInfo extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            CircleProfilePicture(),
+            CircleProfilePicture(UserId: userId,UserPicPath:userPicture),
             Padding(
               padding: const EdgeInsets.only(top: 14.0),
               child: Text(

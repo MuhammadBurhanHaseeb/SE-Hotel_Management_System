@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/foundation.dart';
+
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
 
 class CircleProfilePicture extends StatefulWidget {
+  final String UserId;
+  final String UserPicPath;
   const CircleProfilePicture({
-    super.key,
+    super.key, required this.UserId, required this.UserPicPath,
   });
 
   @override
@@ -17,6 +22,43 @@ class _CircleProfilePictureState extends State<CircleProfilePicture> {
   int gvalue = 0;
   File? _imgFile;
   final ImagePicker _picker = ImagePicker();
+  String? imageUrl; // Image URL fetched from the backend
+
+  @override
+  void initState() {
+    super.initState();
+    String imageURLForFlutter = widget.UserPicPath.replaceAll(r'\', '/');
+    setState(() {
+      imageUrl = url+ imageURLForFlutter;
+    });
+    print(imageUrl);
+  }
+
+  void storeImage(File imageFile, String userId) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(addProfilePic),
+    );
+
+    request.fields['userId'] = userId; // Add userId as a field in the request
+
+    // Attaching the image file to the request
+    request.files.add(
+      await http.MultipartFile.fromPath('profilePicture', imageFile.path),
+    );
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully');
+      } else {
+        print('Failed to upload image');
+      }
+    } catch (error) {
+      print('Error uploading image: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -25,8 +67,11 @@ class _CircleProfilePictureState extends State<CircleProfilePicture> {
         CircleAvatar(
           radius: size.height * 0.08,
           backgroundImage: _imgFile == null
-              ? AssetImage("assets/images/noimageuser.png")
-              : FileImage(File(_imgFile!.path)) as ImageProvider,
+          /// if user doesn't select image from camera or gallery Display the image using imageUrl and if there is no image
+          /// in backend show the dummy image from assets
+            ?(imageUrl != null ? NetworkImage(imageUrl!) as ImageProvider: AssetImage("assets/images/noimageuser.png"))
+          /// But if user select image from camera or gallery show that image
+            : FileImage(File(_imgFile!.path)) as ImageProvider,
         ),
         Positioned(
           bottom: 0,
@@ -86,7 +131,10 @@ class _CircleProfilePictureState extends State<CircleProfilePicture> {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStatePropertyAll(Color(0xFF17203A))),
-                icon: Icon(Icons.camera_alt,color: Colors.white,),
+                icon: Icon(
+                  Icons.camera_alt,
+                  color: Colors.white,
+                ),
                 label: Text(
                   "Camera",
                   style: TextStyle(
@@ -101,7 +149,10 @@ class _CircleProfilePictureState extends State<CircleProfilePicture> {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStatePropertyAll(Color(0xFF17203A))),
-                icon: Icon(Icons.image,color: Colors.white,),
+                icon: Icon(
+                  Icons.image,
+                  color: Colors.white,
+                ),
                 label: Text(
                   "Gallery",
                   style: TextStyle(
@@ -127,5 +178,6 @@ class _CircleProfilePictureState extends State<CircleProfilePicture> {
     setState(() {
       _imgFile = temp;
     });
+    storeImage(_imgFile!,widget.UserId);
   }
 }
