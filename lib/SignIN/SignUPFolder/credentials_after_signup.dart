@@ -168,7 +168,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
               Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 10),
                 child: GenderSelector(
-                  Gender: "",
+                  Gender: "Male",
                   onGenderChanged: (value) {
                     setState(() {
                       gender =
@@ -180,7 +180,7 @@ class _CredentialsAfterSignUpState extends State<CredentialsAfterSignUp> {
               Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 10),
                 child: SelectPhoneNo(
-                  CountryCode: "",
+                  CountryCode: "+92",
                   PhoneNo: "",
                   onCountryCodeChanged: (value) {
                     setState(() {

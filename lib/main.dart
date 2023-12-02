@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
       items = jsonResponse['success'].toString();
     });
 
-    print(items);
+    print("ITEMS"+items);
     //setState(() {});
   }
 
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
         //home:SplashScreen());
         home: (widget.token != null &&
                 JwtDecoder.isExpired(widget.token) == false)
-            ? (items.isEmpty
+            ? ((items == "" || items=="[]")
                 ? CredentialsAfterSignUp(token: widget.token)
                 : FinalBottomNav(UserId: userId,))
             : SplashScreen());
