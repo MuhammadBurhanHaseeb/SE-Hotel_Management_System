@@ -6,8 +6,11 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'booking_name.dart';
 
 class SelectDateForBooking extends StatefulWidget {
-  final num currentRoomPrice;
-  const SelectDateForBooking({Key? key, required this.currentRoomPrice}) : super(key: key);
+  final String UserIdS;
+  final currentRoom;
+  const SelectDateForBooking(
+      {Key? key, required this.UserIdS, this.currentRoom})
+      : super(key: key);
 
   @override
   State<SelectDateForBooking> createState() => _SelectDateForBookingState();
@@ -55,6 +58,10 @@ class _SelectDateForBookingState extends State<SelectDateForBooking> {
         _range = '${DateFormat('dd/MM/yyyy').format(args.value.startDate)} -'
             // ignore: lines_longer_than_80_chars
             ' ${DateFormat('dd/MM/yyyy').format(args.value.endDate ?? args.value.startDate)}';
+        print("START: " + start.toString());
+        print("END: " + end.toString());
+        print("RANGESTART: " + _rangeStart);
+        print("RANGEENd: " + _rangeEnd);
       } else if (args.value is DateTime) {
         _selectedDate = args.value.toString();
       } else if (args.value is List<DateTime>) {
@@ -68,7 +75,8 @@ class _SelectDateForBookingState extends State<SelectDateForBooking> {
   int getNumberOfSelectedDays() {
     if (start != null && end != null) {
       Duration difference = end!.difference(start!);
-      return difference.inDays + 1; // Adding 1 to include both start and end dates
+      return difference.inDays +
+          1; // Adding 1 to include both start and end dates
     }
     return 0; // Return 0 if either start or end is null
   }
@@ -191,7 +199,7 @@ class _SelectDateForBookingState extends State<SelectDateForBooking> {
                         child: IconButton(
                             onPressed: () {
                               setState(() {
-                                noOfGuests = noOfGuests+1;
+                                noOfGuests = noOfGuests + 1;
                               });
                             },
                             icon: Icon(
@@ -217,7 +225,7 @@ class _SelectDateForBookingState extends State<SelectDateForBooking> {
                         child: IconButton(
                             onPressed: () {
                               setState(() {
-                                if(noOfGuests>1) {
+                                if (noOfGuests > 1) {
                                   noOfGuests = noOfGuests - 1;
                                 }
                               });
@@ -235,7 +243,7 @@ class _SelectDateForBookingState extends State<SelectDateForBooking> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: Text(
-                  "Total : \$${widget.currentRoomPrice * getNumberOfSelectedDays()}",//*noOfdays
+                  "Total : \$${widget.currentRoom['price'] * getNumberOfSelectedDays()}", //*noOfdays
                   style: TextStyle(
                     color: Color(0xFF17203A),
                     fontFamily: "Poppins",
@@ -256,35 +264,51 @@ class _SelectDateForBookingState extends State<SelectDateForBooking> {
                   //       Color(0xff0A8ED9),
                   //       Color(0xffA0DAFB),
                   //     ]),
-                  boxShadow:[
+                  boxShadow: [
                     BoxShadow(
                       color: Colors.black26,
                       offset: Offset(0, 4),
                       blurRadius: 5,
                     )
-                  ]
-              ),
+                  ]),
               child: TextButton(
                 onPressed: () {
                   currentOrderGloabl.checkIn = _rangeStart;
                   currentOrderGloabl.checkOut = _rangeEnd;
                   currentOrderGloabl.noOfDays = getNumberOfSelectedDays();
                   currentOrderGloabl.noOfGuests = noOfGuests;
-                  currentOrderGloabl.totalPrice = widget.currentRoomPrice * getNumberOfSelectedDays();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => NameOfBooking()));
+                  currentOrderGloabl.totalPrice =
+                      widget.currentRoom['price'] * getNumberOfSelectedDays();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NameOfBooking(
+                                UserIdN: widget.UserIdS,
+                                currentRoom: widget.currentRoom,
+                                checkInDatetoDisplay: _rangeStart,
+                                checkOutDatetoDisplay: _rangeEnd,
+                                noOfDays: getNumberOfSelectedDays(),
+                                noOfGuest: noOfGuests,
+                                midPrice: widget.currentRoom['price'] *
+                                    getNumberOfSelectedDays(),
+                                checkInDatetoStore: start!,
+                                checkOutDatetoStore: end!,
+                              )));
                 },
                 child: Text(
                   "Continue",
                   style: TextStyle(
                     fontFamily: "Poppins",
                     fontSize: 17,
-                    color:Colors.white,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 style: ButtonStyle(
                   elevation: MaterialStateProperty.all(50),
-                  padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(top: 15,bottom: 15,left: 134,right: 134)),
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                      EdgeInsets.only(
+                          top: 15, bottom: 15, left: 134, right: 134)),
                   //backgroundColor: MaterialStateProperty.all<Color>(Color(0xffA0DAFB))
                 ),
               ),
@@ -305,7 +329,6 @@ class _SelectDateForBookingState extends State<SelectDateForBooking> {
         ),
       ),
     );
-
   }
 }
 

@@ -145,6 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PaymentMethodPage(
+                                  UserIdP: user['_id'].toString(),
                                       isnewBookingPage: false,
                                     )));
                       },

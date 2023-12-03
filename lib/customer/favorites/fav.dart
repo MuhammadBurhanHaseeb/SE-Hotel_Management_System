@@ -134,6 +134,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
             )
                 :
             RoomsInCategory(
+              UserIdR: widget.UserId,
               isInFavScreen: true,
               buttonbackColor: Color(0xFF17203A),
               icon_req: ImageIcon(

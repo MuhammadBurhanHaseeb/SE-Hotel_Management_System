@@ -153,6 +153,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               suffixWidget: GestureDetector(
                   onTap: (){
                     _selectDate(context);
+                    print("SELECTED DATE: "+ selectedDate.toString());
                   },
                   child: Icon(Icons.calendar_month_rounded,color: Color(0xFF17203A),)),
               onchangedFunction: (value){

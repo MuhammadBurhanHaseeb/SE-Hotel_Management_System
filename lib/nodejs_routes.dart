@@ -18,3 +18,4 @@ final getfacilitiesInfoById = url + 'getFacilityLookUpValuesById';
 final getaroombyid = url+'getARoomInfo';
 
 final getBookingsOfAUser = url + 'getAllBookingsofaUser';
+final createNewBooking = url +'createBooking';

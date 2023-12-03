@@ -13,7 +13,8 @@ import 'package:hotel_app/nodejs_routes.dart';
 import 'dart:convert';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String UserIdh;
+  const HomePage({super.key, required this.UserIdh});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -88,6 +89,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //RoomsOptions(size: size),
                 RoomsInCategory(
+                  UserIdR: widget.UserIdh,
                   isInFavScreen: false,
                   buttonbackColor: Colors.transparent,
                   icon_req: Icon(

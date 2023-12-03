@@ -28,7 +28,32 @@ List<PaymentTypes> paymentMethods = [
 
 class PaymentMethodPage extends StatefulWidget {
   final bool isnewBookingPage;
-  const PaymentMethodPage({Key? key, required this.isnewBookingPage}) : super(key: key);
+  final String UserIdP;
+  final currentRoom;
+  final checkInDatetoDisplay;
+  final checkOutDatetoDisplay;
+  final noOfDays;
+  final noOfGuest;
+  final midPrice;
+  final reservName;
+  final reservCountrycode;
+  final reservPhoneno;
+  final checkInDatetoStore;
+  final checkOutDatetoStore;
+  const PaymentMethodPage(
+      {Key? key,
+      required this.isnewBookingPage,
+      required this.UserIdP,
+      this.currentRoom,
+      this.checkInDatetoDisplay,
+      this.checkOutDatetoDisplay,
+      this.noOfDays,
+      this.noOfGuest,
+      this.midPrice,
+      this.reservName,
+      this.reservCountrycode,
+      this.reservPhoneno, this.checkInDatetoStore, this.checkOutDatetoStore})
+      : super(key: key);
 
   @override
   State<PaymentMethodPage> createState() => _PaymentMethodPageState();
@@ -118,7 +143,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 color: Color(0xffE8F8EF),
                 child: ListView.builder(
                   //...increase list size according to the list length
-                  physics: NeverScrollableScrollPhysics(), // Disable scrolling for the ListView
+                  physics:
+                      NeverScrollableScrollPhysics(), // Disable scrolling for the ListView
                   shrinkWrap: true,
                   //...
                   scrollDirection: Axis.vertical,
@@ -126,7 +152,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                   itemBuilder: (context, index) {
                     final paymentMethod = paymentMethods[index];
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0,left: 10.0,right: 10.0),
+                      padding: const EdgeInsets.only(
+                          bottom: 20.0, left: 10.0, right: 10.0),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -144,18 +171,20 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                             });
                           },
                           title: Padding(
-                            padding: const EdgeInsets.only(left: 30.0,right: 30.0,top: 0.0,bottom: 0.0),
+                            padding: const EdgeInsets.only(
+                                left: 30.0, right: 30.0, top: 0.0, bottom: 0.0),
                             child: Row(
                               children: [
                                 // Add your icon here as a prefix
                                 Image.asset(
-                                    paymentMethod.IconImage,
-                                  width: size.height*0.03,
-                                  height: size.height*0.03,
+                                  paymentMethod.IconImage,
+                                  width: size.height * 0.03,
+                                  height: size.height * 0.03,
                                 ),
 
-
-                                SizedBox(width: size.height*0.026), // Adjust the spacing as needed
+                                SizedBox(
+                                    width: size.height *
+                                        0.026), // Adjust the spacing as needed
 
                                 Text(paymentMethod.name),
 
@@ -164,8 +193,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                 Radio<PaymentTypes>(
                                   activeColor: Color(0xff0A8ED9),
                                   value: paymentMethod,
-                                  groupValue: paymentMethods
-                                      .firstWhere((element) => element.isSelected),
+                                  groupValue: paymentMethods.firstWhere(
+                                      (element) => element.isSelected),
                                   onChanged: (value) {
                                     setState(() {
                                       paymentMethods[index].isSelected = true;
@@ -187,7 +216,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 ),
               ),
               SizedBox(
-                height: size.height*0.22,
+                height: size.height * 0.22,
               ),
               Visibility(
                 visible: widget.isnewBookingPage,
@@ -204,30 +233,49 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                         //       Color(0xff0A8ED9),
                         //       Color(0xffA0DAFB),
                         //     ]),
-                        boxShadow:[
+                        boxShadow: [
                           BoxShadow(
                             color: Colors.black26,
                             offset: Offset(0, 4),
                             blurRadius: 5,
                           )
-                        ]
-                    ),
+                        ]),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => FinalizingPage()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FinalizingPage(
+                                      UserIdF: widget.UserIdP,
+                                      currentRoom: widget.currentRoom,
+                                      checkInDateToDisplay: widget.checkInDatetoDisplay,
+                                      checkOutDateToDisplay: widget.checkOutDatetoDisplay,
+                                      noOfDays: widget.noOfDays,
+                                      noOfGuest: widget.noOfGuest,
+                                      midPrice: widget.midPrice,
+                                      reservName: widget.reservName,
+                                      reservCountrycode:
+                                          widget.reservCountrycode,
+                                      reservPhoneno: widget.reservPhoneno,
+                                      paymentId: "656b84257cafce5748273f79", //right now constant paypal
+                                  checkInDatetoStore: widget.checkInDatetoStore,
+                                  checkOutDatetoStore: widget.checkOutDatetoStore,
+                                    )));
                       },
                       child: Text(
                         "Continue",
                         style: TextStyle(
                           fontFamily: "Poppins",
                           fontSize: 17,
-                          color:Colors.white,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(50),
-                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(top: 15,bottom: 15,left: 134,right: 134)),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.only(
+                                top: 15, bottom: 15, left: 134, right: 134)),
                         //backgroundColor: MaterialStateProperty.all<Color>(Color(0xffA0DAFB))
                       ),
                     ),

@@ -5,14 +5,14 @@ import 'package:rive/rive.dart';
 
 import '../../constants.dart';
 import 'home_screen.dart';
-import '../components/btm_nav_item.dart';
 import '../components/side_menu_components/menu_btn.dart';
 import '../components/side_menu_components/model/menu.dart';
 import '../components/side_menu_components/rive_utils.dart';
 import '../components/side_menu_components/side_bar.dart';
 
 class MainCustomerHomeScreen extends StatefulWidget {
-  const MainCustomerHomeScreen({super.key});
+  final String UserIdM;
+  const MainCustomerHomeScreen({super.key, required this.UserIdM});
 
   @override
   State<MainCustomerHomeScreen> createState() => _MainCustomerHomeScreenState();
@@ -88,11 +88,13 @@ class _MainCustomerHomeScreenState extends State<MainCustomerHomeScreen>
               offset: Offset(animation.value * 265, 0),
               child: Transform.scale(
                 scale: scalAnimation.value,
-                child: const ClipRRect(
+                child: ClipRRect(
                   borderRadius: BorderRadius.all(
                     Radius.circular(24),
                   ),
-                  child: HomePage(),
+                  child: HomePage(
+                    UserIdh: widget.UserIdM,
+                  ),
                 ),
               ),
             ),
@@ -132,50 +134,6 @@ class _MainCustomerHomeScreenState extends State<MainCustomerHomeScreen>
           ),
         ],
       ),
-      // bottomNavigationBar: Transform.translate(
-      //   offset: Offset(0, 100 * animation.value),
-      //   child: SafeArea(
-      //     child: Container(
-      //       padding:
-      //       const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 12),
-      //       margin: const EdgeInsets.symmetric(horizontal: 24),
-      //       decoration: BoxDecoration(
-      //         color: backgroundColor2.withOpacity(0.8),
-      //         borderRadius: const BorderRadius.all(Radius.circular(24)),
-      //         boxShadow: [
-      //           BoxShadow(
-      //             color: backgroundColor2.withOpacity(0.3),
-      //             offset: const Offset(0, 20),
-      //             blurRadius: 20,
-      //           ),
-      //         ],
-      //       ),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           ...List.generate(
-      //             bottomNavItems.length,
-      //                 (index) {
-      //               Menu navBar = bottomNavItems[index];
-      //               return BtmNavItem(
-      //                 navBar: navBar,
-      //                 press: () {
-      //                   RiveUtils.chnageSMIBoolState(navBar.rive.status!);
-      //                   updateSelectedBtmNav(navBar);
-      //                 },
-      //                 riveOnInit: (artboard) {
-      //                   navBar.rive.status = RiveUtils.getRiveInput(artboard,
-      //                       stateMachineName: navBar.rive.stateMachineName);
-      //                 },
-      //                 selectedNav: selectedBottonNav,
-      //               );
-      //             },
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

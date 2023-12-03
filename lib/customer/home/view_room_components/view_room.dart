@@ -10,10 +10,11 @@ import 'reviews.dart';
 import 'room_images.dart';
 
 class ViewRoomPage extends StatefulWidget {
+  final String UserIdV;
   final currentRoom;
   const ViewRoomPage({
     Key? key,
-    required this.currentRoom,
+    required this.currentRoom, required this.UserIdV,
   }) : super(key: key);
 
   @override
@@ -202,8 +203,10 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SelectDateForBooking(
-                      currentRoomPrice: widget.currentRoom['price'],
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        SelectDateForBooking(
+                          UserIdS: widget.UserIdV,
+                          currentRoom: widget.currentRoom,
                     )
                     ));
                   },

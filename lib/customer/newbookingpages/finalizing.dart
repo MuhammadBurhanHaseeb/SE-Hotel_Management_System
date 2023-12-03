@@ -1,18 +1,112 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/customer/currentroom.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import 'alertboxi.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
 
-class FinalizingPage extends StatelessWidget {
+class FinalizingPage extends StatefulWidget {
+  final String UserIdF;
+  final currentRoom;
+  final String checkInDateToDisplay;
+  final String checkOutDateToDisplay;
+  final num noOfDays;
+  final num noOfGuest;
+  final num midPrice;
+  final String reservName;
+  final String reservCountrycode;
+  final String reservPhoneno;
+  final String paymentId;
+  final DateTime checkInDatetoStore;
+  final DateTime checkOutDatetoStore;
   const FinalizingPage({
-    Key? key,
+    Key? key, required this.UserIdF, this.currentRoom, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfDays, required this.noOfGuest, required this.midPrice, required this.reservName, required this.reservCountrycode, required this.reservPhoneno, required this.paymentId, required this.checkInDatetoStore, required this.checkOutDatetoStore,
   }) : super(key: key);
+
+  @override
+  State<FinalizingPage> createState() => _FinalizingPageState();
+}
+
+class _FinalizingPageState extends State<FinalizingPage> {
+
+  num price_after_tax = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    calculatePriceAfterTax();
+  }
+
+  void calculatePriceAfterTax(){
+    /// using dummy tax =10% bcz no room has tax right now so change it to widget.currentRoom['tax']
+    num tax = widget.midPrice *(10/100);
+    setState(() {
+      price_after_tax = widget.midPrice+tax;
+    });
+  }
+
+  void createBookingFunction() async {
+    print("pppppppp"+widget.UserIdF+"  "+widget.currentRoom.toString()+"  "+widget.checkInDatetoStore.toString()+"  "+widget.checkOutDatetoStore.toString()+"  "+widget.noOfDays.toString()+"  "+widget.noOfGuest.toString()+"  "+price_after_tax.toString()+"  "+widget.reservName+"  "+widget.reservCountrycode+"   "+widget.reservPhoneno+"   "+widget.paymentId);
+    if (
+    widget.UserIdF.isNotEmpty &&
+    widget.currentRoom.isNotEmpty &&
+    widget.checkInDatetoStore != null &&
+    widget.checkOutDatetoStore != null &&
+        widget.noOfDays != null &&
+        widget.noOfGuest != null &&
+        price_after_tax != null &&
+    widget.reservName.isNotEmpty &&
+    widget.reservCountrycode.isNotEmpty &&
+    widget.reservPhoneno.isNotEmpty &&
+    widget.paymentId.isNotEmpty ) {
+      var regBody = {
+        "userId":widget.UserIdF,
+        "roomId":widget.currentRoom['_id'].toString(),
+        "checkIn":widget.checkInDatetoStore.toIso8601String(),
+        "checkOut":widget.checkOutDatetoStore.toIso8601String(),
+        "noOfDays":widget.noOfDays,
+        "noOfGuests":widget.noOfGuest,
+        "reservationName":widget.reservName,
+        "reservationCountryCode":widget.reservCountrycode,
+        "reservationPhoneNo":widget.reservPhoneno,
+        "reservationPaymentMethod":widget.paymentId,
+        "totalPrice": price_after_tax
+      };
+
+      var response = await http.post(Uri.parse(createNewBooking),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody));
+
+      var jsonResponse = jsonDecode(response.body);
+
+      print(jsonResponse['status']);
+
+      if (jsonResponse['status']) {
+        print("ALL GOOD");
+        await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertBox();
+          },
+        );
+      } else {
+        print("SomeThing Went Wrong");
+      }
+    } else {
+      print("ONE OF PARAMETERS EMPTY");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: BackButton(
           onPressed: () {
             Navigator.pop(context);
@@ -67,7 +161,7 @@ class FinalizingPage extends StatelessWidget {
                             ),
                           ),
                           title: Text(
-                            currentOrderGloabl.name,
+                            widget.currentRoom['roomName'],
                             style: TextStyle(
                               fontFamily: "Poppins",
                               color: Color(0xFF17203A),
@@ -81,7 +175,7 @@ class FinalizingPage extends StatelessWidget {
                                 height: size.height * 0.003,
                               ),
                               Text(
-                                '\$${currentOrderGloabl.price.toString()} / day',
+                                '\$${widget.currentRoom['price'].toString()} / day',
                                 style: TextStyle(
                                   color: Color(0xff0A8ED9),
                                   fontFamily: "PoppinsThin",
@@ -101,7 +195,7 @@ class FinalizingPage extends StatelessWidget {
                                     color: Colors.grey,
                                   ),
                                   Text(
-                                    '${currentOrderGloabl.bedrooms.toString()} Bedroom',
+                                    '${widget.currentRoom['beds'].toString()} Bedroom',
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontFamily: "PoppinsThin",
@@ -114,7 +208,7 @@ class FinalizingPage extends StatelessWidget {
                                     color: Colors.grey,
                                   ),
                                   Text(
-                                    '${currentOrderGloabl.bathrooms.toString()} Bathroom',
+                                    '${widget.currentRoom['bathrooms'].toString()} Bathroom',
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontFamily: "PoppinsThin",
@@ -184,7 +278,7 @@ class FinalizingPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      currentOrderGloabl.checkIn,
+                                      widget.checkInDateToDisplay,
                                       style: TextStyle(
                                         fontFamily: "PoppinsBold",
                                         fontSize: 17,
@@ -195,7 +289,7 @@ class FinalizingPage extends StatelessWidget {
                                       height: 11,
                                     ),
                                     Text(
-                                      currentOrderGloabl.checkOut,
+                                      widget.checkOutDateToDisplay,
                                       style: TextStyle(
                                         fontFamily: "PoppinsBold",
                                         fontSize: 17,
@@ -206,7 +300,7 @@ class FinalizingPage extends StatelessWidget {
                                       height: 11,
                                     ),
                                     Text(
-                                      currentOrderGloabl.noOfGuests.toString(),
+                                      widget.noOfGuest.toString(),
                                       style: TextStyle(
                                         fontFamily: "PoppinsBold",
                                         fontSize: 17,
@@ -261,6 +355,17 @@ class FinalizingPage extends StatelessWidget {
                                     SizedBox(
                                       height: 11,
                                     ),
+                                    Text(
+                                      "Price of "+widget.noOfDays.toString()+" days",
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 17,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 11,
+                                    ),
                                     Container(
                                       height: 2,
                                       width: 200,
@@ -285,7 +390,7 @@ class FinalizingPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      currentOrderGloabl.noOfDays.toString(),
+                                      widget.noOfDays.toString(),
                                       style: TextStyle(
                                         fontFamily: "PoppinsBold",
                                         fontSize: 17,
@@ -296,7 +401,18 @@ class FinalizingPage extends StatelessWidget {
                                       height: 11,
                                     ),
                                     Text(
-                                      "10 %",
+                                      "10 %",  //widget.currentRoom['tax']
+                                      style: TextStyle(
+                                        fontFamily: "PoppinsBold",
+                                        fontSize: 17,
+                                        //fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 11,
+                                    ),
+                                    Text(
+                                      widget.midPrice.toString(),  //widget.currentRoom['tax']
                                       style: TextStyle(
                                         fontFamily: "PoppinsBold",
                                         fontSize: 17,
@@ -315,7 +431,7 @@ class FinalizingPage extends StatelessWidget {
                                       height: 11,
                                     ),
                                     Text(
-                                      "\$${currentOrderGloabl.totalPrice}",
+                                      price_after_tax.toString(),
                                       style: TextStyle(
                                         fontFamily: "PoppinsBold",
                                         fontSize: 17,
@@ -405,13 +521,8 @@ class FinalizingPage extends StatelessWidget {
                     )
                   ]),
               child: TextButton(
-                onPressed: () async {
-                  await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertBox();
-                    },
-                  );
+                onPressed: ()  {
+                  createBookingFunction();
                 },
                 child: Text(
                   "Complete Booking",

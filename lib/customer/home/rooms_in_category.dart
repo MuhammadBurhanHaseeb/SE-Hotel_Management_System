@@ -5,11 +5,12 @@ import '../customerBL/housesBL.dart';
 import 'view_room_components/view_room.dart';
 
 class RoomsInCategory extends StatefulWidget {
+  final String UserIdR;
   final bool isInFavScreen;
   final Color buttonbackColor;
   final Widget icon_req;
   final List rooms;
-  const RoomsInCategory({Key? key, required this.rooms, required this.icon_req, required this.buttonbackColor, required this.isInFavScreen}) : super(key: key);
+  const RoomsInCategory({Key? key, required this.rooms, required this.icon_req, required this.buttonbackColor, required this.isInFavScreen, required this.UserIdR}) : super(key: key);
 
   @override
   State<RoomsInCategory> createState() => _RoomsInCategoryState();
@@ -138,6 +139,7 @@ class _RoomsInCategoryState extends State<RoomsInCategory> {
                             builder: (context) =>
                                 ViewRoomPage(
                                   currentRoom: currentRoom,
+                                  UserIdV: widget.UserIdR,
                                 )
                         ));
                       }
