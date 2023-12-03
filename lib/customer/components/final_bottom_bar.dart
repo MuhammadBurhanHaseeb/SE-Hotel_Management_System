@@ -31,8 +31,8 @@ class _FinalBottomNavState extends State<FinalBottomNav> {
     super.initState();
     _widgetOptions = <Widget>[
       MainCustomerHomeScreen(),
-      FavouritesPage(),
-      BookingHistory(),
+      FavouritesPage(UserId: widget.UserId,),
+      BookingHistory(UserIdB: widget.UserId,),
       ProfilePage(UserIdp: widget.UserId),
     ];
   }

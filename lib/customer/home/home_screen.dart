@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         bottom: false,
         child: Padding(

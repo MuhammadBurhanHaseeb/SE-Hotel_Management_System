@@ -3,16 +3,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
+import 'dart:convert';
 
 
 class BookingHistory extends StatefulWidget {
-  const BookingHistory({Key? key}) : super(key: key);
+  final String UserIdB;
+  const BookingHistory({Key? key, required this.UserIdB}) : super(key: key);
 
   @override
   State<BookingHistory> createState() => _BookingHistoryState();
 }
 
 class _BookingHistoryState extends State<BookingHistory> {
+  List bookingofUser= [];
   double increasedScreenSize = 1.0;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -28,27 +33,91 @@ class _BookingHistoryState extends State<BookingHistory> {
     // TODO: implement initState
     super.initState();
     _selectedDate = _focusedDay;
-    loadPreviousEvents();
+    //loadPreviousEvents();
+    getBookingHistoryOfaUser();
   }
 
-  loadPreviousEvents() {
-    mySelectedEvents = {
-      "2023-08-13": [
-        {"noOfDays": "02", "roomName": "standard room 03", "payment": "900"},
-        {"noOfDays": "01", "roomName": "suit 04", "payment": "10,000"},
-        {"noOfDays": "02", "roomName": "standard room 03", "payment": "900"},
-        {"noOfDays": "01", "roomName": "suit 04", "payment": "10,000"},
-        {"noOfDays": "02", "roomName": "standard room 03", "payment": "900"},
-        {"noOfDays": "01", "roomName": "suit 04", "payment": "10,000"}
-      ],
-      "2023-09-30": [
-        {"noOfDays": "05", "roomName": "delux room 01", "payment": "100"}
-      ],
-      "2023-09-20": [
-        {"noOfDays": "10", "roomName": "family room 02", "payment": "200"}
-      ]
-    };
+  void getBookingHistoryOfaUser() async {
+    String userId = widget.UserIdB;
+    var response = await http.get(
+      Uri.parse('$getBookingsOfAUser?userId=$userId'),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() async {
+      bookingofUser = jsonResponse['success'];
+      print("BOOKING: "+ bookingofUser.toString());
+      // Process the fetched bookings into the desired format
+      mySelectedEvents = await PopulatingbookingsInOneday(bookingofUser);
+    });
   }
+
+
+
+  Future<Map<String, List>> PopulatingbookingsInOneday(List bookings) async {
+    Map<String, List> selectedEvents = {};
+
+    // Process the fetched bookings into the desired format
+    for (var booking in bookings) {
+      String roomname = await getRoomNameByIdsFunction(booking['roomId'].toString());
+      var date = DateTime.parse(booking['checkIn'] as String).toIso8601String().split('T')[0]; // to only get the date part
+      var bookingDetails = {
+        "noOfDays": booking['noOfDays'],
+        "roomName": roomname ,
+        "payment": booking['totalPrice'],
+      };
+
+      if (selectedEvents.containsKey(date)) {
+        selectedEvents[date]!.add(bookingDetails);
+      } else {
+        selectedEvents[date] = [bookingDetails];
+      }
+    }
+
+    return selectedEvents;
+  }
+
+  /// to get the roomName to show through the roomId in booking history
+  Future<String> getRoomNameByIdsFunction(roomId) async {
+
+    var room;
+    var response = await http.get(
+      Uri.parse('$getaroombyid?id=$roomId'),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      room = jsonResponse['success'];
+
+    });
+    print("Current Room: " +room.toString());
+    return room['roomName'].toString();
+
+  }
+
+
+
+  // loadPreviousEvents() {
+  //   mySelectedEvents = {
+  //     "2023-08-13": [
+  //       {"noOfDays": "02", "roomName": "standard room 03", "payment": "900"},
+  //       {"noOfDays": "01", "roomName": "suit 04", "payment": "10,000"},
+  //       {"noOfDays": "02", "roomName": "standard room 03", "payment": "900"},
+  //       {"noOfDays": "01", "roomName": "suit 04", "payment": "10,000"},
+  //       {"noOfDays": "02", "roomName": "standard room 03", "payment": "900"},
+  //       {"noOfDays": "01", "roomName": "suit 04", "payment": "10,000"}
+  //     ],
+  //     "2023-09-30": [
+  //       {"noOfDays": "05", "roomName": "delux room 01", "payment": "100"}
+  //     ],
+  //     "2023-09-20": [
+  //       {"noOfDays": "10", "roomName": "family room 02", "payment": "200"}
+  //     ]
+  //   };
+  // }
+
 
   List _listOfDayEvents(DateTime dateTime) {
     if (mySelectedEvents[DateFormat('yyyy-MM-dd').format(dateTime)] != null) {
@@ -163,7 +232,7 @@ class _BookingHistoryState extends State<BookingHistory> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // Call samplecheckerfunction() after _selectedDate is set
+    // Calling samplecheckerfunction() after _selectedDate is set
     samplecheckerfunction();
     return SingleChildScrollView(
       child: Container(
@@ -174,21 +243,6 @@ class _BookingHistoryState extends State<BookingHistory> {
             SizedBox(
               height: size.height * 0.07,
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   crossAxisAlignment: CrossAxisAlignment.center,
-            //   children: [
-            //     // yay IconButton ki jagan app ka logo lagana hai yahan
-            //     IconButton(
-            //         onPressed: () {},
-            //         icon: Icon(Icons.chevron_left),
-            //       style: ButtonStyle(
-            //         //shape: MaterialStateProperty.all<OutlinedBorder>(OutlinedBorder()),
-            //       ),
-            //     ),
-                // SizedBox(
-                //   width: size.width*0.14,
-                // ),
                 Text(
                   "Booking History",
                   style: TextStyle(

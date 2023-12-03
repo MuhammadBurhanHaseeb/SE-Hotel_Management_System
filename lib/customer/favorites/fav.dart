@@ -5,9 +5,85 @@ import 'package:flutter/material.dart';
 import '../home/rooms_in_category.dart';
 import '../customerBL/housesBL.dart';
 
-class FavouritesPage extends StatelessWidget {
-  const FavouritesPage({Key? key}) : super(key: key);
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
 
+class FavouritesPage extends StatefulWidget {
+  final String UserId;
+  const FavouritesPage({Key? key, required this.UserId,}) : super(key: key);
+
+  @override
+  State<FavouritesPage> createState() => _FavouritesPageState();
+}
+
+class _FavouritesPageState extends State<FavouritesPage> {
+  List rooms = [];
+  bool _isLoading = false;
+  var userCredentials;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //to show loading circle while things are loading otherwise it wil show error for a short while
+    _fetchFavData();
+    // getFavRoomsByIdsFunction(widget.UserCredentials[0]["_id"],widget.UserCredentials[0]['favorites']);
+  }
+
+  @override
+  Future<void> _fetchFavData() async {
+    setState(() {
+      _isLoading = true; // Set loading state to true while fetching data
+    });
+
+    // data fetching
+    getCredentialsFunction(widget.UserId);
+
+    // Simulating a delay of 1 seconds or 0.5 sec(500 milliseconds) to fetch data
+    await Future.delayed(Duration(milliseconds: 500));
+
+    setState(() {
+      // Set loading state to false after data is fetched
+      _isLoading = false;
+      // Updating data fields based on fetched data
+
+    });
+  }
+
+  void getCredentialsFunction(userId) async {
+    var response = await http.get(
+      Uri.parse('$getCredentialss?userId=$userId'),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      userCredentials = jsonResponse['success'];
+    });
+    print("profile    " + userCredentials.toString());
+    getFavRoomsByIdsFunction(userCredentials[0]['favorites']);
+  }
+
+  void getFavRoomsByIdsFunction(favids) async {
+    List<dynamic> allFavContent = [];
+    List hehe = favids;
+    print("HEHE : "+ hehe.toString());
+    for(int i=0 ; i<hehe.length ; i++) {
+      var favId=hehe[i];
+      var response = await http.get(
+        Uri.parse('$getaroombyid?id=$favId'),
+        headers: {"Content-Type": "application/json"},
+      );
+      var jsonResponse = jsonDecode(response.body);
+      print(jsonResponse);
+      allFavContent.add(jsonResponse['success']);
+      setState(() {
+        rooms = allFavContent;
+      });
+      print("rooms: " +rooms.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -48,6 +124,15 @@ class FavouritesPage extends StatelessWidget {
             // SizedBox(
             //   height: size.height * 0.06,
             // ),
+
+            _isLoading
+                ? Center(
+              child:
+              CircularProgressIndicator(
+                color: Colors.grey,
+              ), // Showing circular progress indicator while loading
+            )
+                :
             RoomsInCategory(
               isInFavScreen: true,
               buttonbackColor: Color(0xFF17203A),
@@ -56,78 +141,16 @@ class FavouritesPage extends StatelessWidget {
                 color: Colors.white,
                 size: size.height * 0.02,//10
               ),
-              rooms: [
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'Orchad House',
-                    price: 2500000000,
-                    bedrooms: 6,
-                    bathrooms: 4,size: 4000),
-
-                HouseTrailers(
-                    name: 'House', price: 2500000000, bedrooms: 6, bathrooms: 4,size: 4000),
-                HouseTrailers(
-                    name: 'The Hollies House',
-                    price: 2000000000,
-                    bedrooms: 5,
-                    bathrooms: 2,size: 4000),
-              ],
+              rooms: rooms!,
               //icon
             ),
+
+            /// added this because while loading and if the rooms are less in
+            /// no then the screen becomes short bcz of singleChildscrollview
+            Container(
+              //color: Colors.red,
+              height: 700,
+            )
           ],
         ),
       ),

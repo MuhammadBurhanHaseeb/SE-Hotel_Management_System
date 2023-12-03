@@ -87,15 +87,15 @@ class _AppBarCurvedBottomState extends State<AppBarCurvedBottom> {
       case 0:
         page = MainCustomerHomeScreen();
         break;
-      case 1:
-        page = FavouritesPage();
-        break;
-      case 2:
-        page = BookingHistory();
-        break;
-      case 3:
-        page = ProfilePage(UserIdp: "12345",);
-        break;
+      // case 1:
+      //   page = FavouritesPage();
+      //   break;
+      // case 2:
+      //   page = BookingHistory();
+      //   break;
+      // case 3:
+      //   page = ProfilePage(UserIdp: "12345",);
+      //   break;
       default:
         page = MainCustomerHomeScreen();
         break;

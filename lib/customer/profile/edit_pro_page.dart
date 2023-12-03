@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../components/custom_textfield.dart';
 import 'gender.dart';
 import 'ph_no.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
 
 class EditProfilePage extends StatefulWidget {
   final UserCredentials;
@@ -14,6 +17,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  String fullname= '';
+  String cnic = '';
   String gender = '';
   String countrycode = '';
   String phoneNumber = '';
@@ -24,7 +29,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     String dateOfBirthString = widget.UserCredentials[0]['dateOfBirth'];
     selectedDate = DateTime.parse(dateOfBirthString);
-    //selectedDate = widget.UserCredentials[0]['dateOfBirth'];
+    gender = widget.UserCredentials[0]['gender'];
+    countrycode = widget.UserCredentials[0]['countryCode'];
+    phoneNumber = widget.UserCredentials[0]['phoneNo'];
+    fullname = widget.UserCredentials[0]['fullName'];
+    cnic = widget.UserCredentials[0]['cnic'];
   }
 
   String formatDate(DateTime date) {
@@ -46,6 +55,54 @@ class _EditProfilePageState extends State<EditProfilePage> {
       // Handle the selected date if needed
     }
   }
+
+  void updateCredentialsFunction(id) async {
+    print("ID"+ id);
+    var reqBody = {
+      "id":id,
+      "fullName":fullname,
+      "cnic":cnic,
+      "dateOfBirth":selectedDate?.toIso8601String(),
+      "gender":gender,
+      "countryCode":countrycode,
+      "phoneNo":phoneNumber
+    };
+    var response = await http.post(Uri.parse(updateCredentials),
+        headers: {"Content-Type":"application/json"},
+        body: jsonEncode(reqBody)
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            title: Text(
+              jsonResponse['status']?'Updated':'Error',
+              style: TextStyle(
+              fontFamily: "Poppins",
+              color: jsonResponse['status']?Colors.green[300]:Colors.red[300],
+            ),),
+            content: Text(jsonResponse['status']?"User updated successfully":"Error updating user",style: TextStyle(
+              fontFamily: "Poppins",
+            ),),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK',style: TextStyle(
+                    fontFamily: "Poppins",
+                    color: Colors.blue
+                ),),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+              ),
+            ],
+          );});
+  }
+
   @override
   Widget build(BuildContext context) {
     // Initial value
@@ -79,8 +136,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ],
             ),
-            CustomTextField(initialValue: widget.UserCredentials[0]['fullName'],hintText: "Full Name", onchangedFunction: (value) {},obscureTexthehe : false),
-            CustomTextField(initialValue: widget.UserCredentials[0]['cnic'],hintText: "CNIC", onchangedFunction: (value) {},obscureTexthehe : false),
+            CustomTextField(
+                initialValue: fullname,hintText: "Full Name",
+                onchangedFunction: (value) {
+                  fullname = value;
+                },obscureTexthehe : false),
+            CustomTextField(
+                initialValue: cnic,hintText: "CNIC",
+                onchangedFunction: (value) {
+                  cnic = value;
+                },obscureTexthehe : false),
             CustomTextField(
               initialValue: selectedDate != null ? formatDate(selectedDate!) : '',
               hintText: "Date of Birth",
@@ -95,7 +160,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               },
             ),
             GenderSelector(
-              Gender: widget.UserCredentials[0]['gender'],
+              Gender: gender,
               onGenderChanged: (value) {
                 setState(() {
                   gender = value; // Update the selected gender in parent widget
@@ -103,8 +168,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               },
             ),
             SelectPhoneNo(
-              PhoneNo: widget.UserCredentials[0]['phoneNo'],
-              CountryCode: widget.UserCredentials[0]['countryCode'],
+              PhoneNo: phoneNumber,
+              CountryCode: countrycode,
               onCountryCodeChanged: (value) {
                 setState(() {
                   countrycode = value; // Update the selected gender in parent widget
@@ -188,7 +253,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ]
                 ),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    updateCredentialsFunction(widget.UserCredentials[0]['_id']);
+                  },
                   child: Text(
                       "Update",
                     style: TextStyle(
