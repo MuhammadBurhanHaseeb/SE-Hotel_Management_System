@@ -86,10 +86,20 @@ class _FinalizingPageState extends State<FinalizingPage> {
 
       if (jsonResponse['status']) {
         print("ALL GOOD");
+        print("BOOKING ID: " + jsonResponse['success'][0]['_id']);
         await showDialog(
           context: context,
           builder: (context) {
-            return AlertBox();
+            return AlertBox(
+            BookingId:"8765432478876",//jsonResponse['success'][0]['_id'],
+            reservName:widget.reservName,
+            BookingphoneNo:widget.reservCountrycode+widget.reservPhoneno,
+            RoomName:widget.currentRoom['roomName'],
+            checkInDateToDisplay:widget.checkInDateToDisplay,
+            checkOutDateToDisplay:widget.checkOutDateToDisplay,
+            noOfGuest:widget.noOfGuest,
+            TotalPrice:price_after_tax,
+            );
           },
         );
       } else {

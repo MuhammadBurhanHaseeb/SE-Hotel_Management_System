@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:hotel_app/customer/currentroom.dart';
 
 class ReceiptInfo extends StatelessWidget {
+  final String BookingId;
+  final String reservName;
+  final String BookingphoneNo;
+  final String RoomName;
+  final String checkInDateToDisplay;
+  final String checkOutDateToDisplay;
+  final num noOfGuest;
+  final num TotalPrice;
   const ReceiptInfo({
-    super.key,
+    super.key, required this.BookingId, required this.reservName, required this.BookingphoneNo, required this.RoomName, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfGuest, required this.TotalPrice,
   });
 
   @override
@@ -94,7 +102,7 @@ class ReceiptInfo extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text("0839784364",textAlign: TextAlign.end,style: TextStyle(
+              Text(BookingId,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
                 fontSize: 17,
@@ -103,7 +111,7 @@ class ReceiptInfo extends StatelessWidget {
                 height: 5,
               ),
               //.....................................................
-              Text("Areeba Waheed",textAlign: TextAlign.end,style: TextStyle(
+              Text(reservName,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
                 fontSize: 17,
@@ -112,7 +120,7 @@ class ReceiptInfo extends StatelessWidget {
                 height: 5,
               ),
               //.....................................................
-              Text("+92839784364",textAlign: TextAlign.end,style: TextStyle(
+              Text(BookingphoneNo,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
                 fontSize: 17,
@@ -121,7 +129,7 @@ class ReceiptInfo extends StatelessWidget {
                 height: 5,
               ),
               //.....................................................
-              Text(currentOrderGloabl.name,textAlign: TextAlign.end,style: TextStyle(
+              Text(RoomName,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
                 fontSize: 17,
@@ -130,7 +138,7 @@ class ReceiptInfo extends StatelessWidget {
                 height: 5,
               ),
               //.....................................................
-              Text(currentOrderGloabl.checkIn,textAlign: TextAlign.end,style: TextStyle(
+              Text(checkInDateToDisplay,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
                 fontSize: 17,
@@ -139,7 +147,7 @@ class ReceiptInfo extends StatelessWidget {
                 height: 5,
               ),
               //.....................................................
-              Text(currentOrderGloabl.checkOut,textAlign: TextAlign.end,style: TextStyle(
+              Text(checkOutDateToDisplay,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
                 fontSize: 17,
@@ -148,7 +156,7 @@ class ReceiptInfo extends StatelessWidget {
                 height: 5,
               ),
               //.....................................................
-              Text(currentOrderGloabl.noOfGuests.toString(),textAlign: TextAlign.end,style: TextStyle(
+              Text(noOfGuest.toString(),textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
                 fontSize: 17,
@@ -157,7 +165,7 @@ class ReceiptInfo extends StatelessWidget {
                 height: 5,
               ),
               //.....................................................
-              Text('\$${currentOrderGloabl.totalPrice.toString()}',textAlign: TextAlign.end,style: TextStyle(
+              Text(TotalPrice.toString(),textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
                 fontSize: 17,

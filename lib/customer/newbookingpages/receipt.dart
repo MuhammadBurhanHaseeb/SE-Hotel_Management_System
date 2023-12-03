@@ -6,7 +6,15 @@ import '../home/main_customer_home.dart';
 import 'receipt_information.dart';
 
 class FinalReceipt extends StatefulWidget {
-  const FinalReceipt({Key? key}) : super(key: key);
+  final String BookingId;
+  final String reservName;
+  final String BookingphoneNo;
+  final String RoomName;
+  final String checkInDateToDisplay;
+  final String checkOutDateToDisplay;
+  final num noOfGuest;
+  final num TotalPrice;
+  const FinalReceipt({Key? key, required this.BookingId, required this.reservName, required this.BookingphoneNo, required this.RoomName, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfGuest, required this.TotalPrice}) : super(key: key);
 
   @override
   State<FinalReceipt> createState() => _FinalReceiptState();
@@ -104,7 +112,16 @@ class _FinalReceiptState extends State<FinalReceipt> {
                     ),),
                   ),
 
-                  ReceiptInfo(),
+                  ReceiptInfo(
+                    BookingId:widget.BookingId,
+                    reservName:widget.reservName,
+                    BookingphoneNo:widget.BookingphoneNo,
+                    RoomName:widget.RoomName,
+                    checkInDateToDisplay:widget.checkInDateToDisplay,
+                    checkOutDateToDisplay:widget.checkOutDateToDisplay,
+                    noOfGuest:widget.noOfGuest,
+                    TotalPrice:widget.TotalPrice,
+                  ),
 
                   ///......................... download receipt button .........................///
                   Positioned(

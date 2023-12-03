@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 import 'receipt.dart';
 
 class AlertBox extends StatelessWidget {
+  final String BookingId;
+  final String reservName;
+  final String BookingphoneNo;
+  final String RoomName;
+  final String checkInDateToDisplay;
+  final String checkOutDateToDisplay;
+  final num noOfGuest;
+  final num TotalPrice;
   const AlertBox({
-    super.key,
+    super.key, required this.BookingId, required this.reservName, required this.BookingphoneNo, required this.RoomName, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfGuest, required this.TotalPrice,
   });
 
   @override
@@ -73,7 +81,17 @@ class AlertBox extends StatelessWidget {
                     MaterialStateProperty.all<Color>(
                         Color(0xFF17203A))),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FinalReceipt()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                      FinalReceipt(
+                        BookingId:BookingId,
+                        reservName:reservName,
+                        BookingphoneNo:BookingphoneNo,
+                        RoomName:RoomName,
+                        checkInDateToDisplay:checkInDateToDisplay,
+                        checkOutDateToDisplay:checkOutDateToDisplay,
+                        noOfGuest:noOfGuest,
+                        TotalPrice:TotalPrice,
+                      )));
 
                 },
                 child: const Text(
