@@ -52,7 +52,7 @@ class _RoomsInCategoryState extends State<RoomsInCategory> {
                     ],
                     image: DecorationImage(
                       image:
-                      (currentRoom['gallery']!= null ||currentRoom['gallery']!= [])
+                      (currentRoom['gallery']!= null && currentRoom['gallery'].isNotEmpty)
                           ?NetworkImage(currentRoom['gallery'][0].toString()):AssetImage("assets/images/no_image.jpg") as ImageProvider,
                       fit: BoxFit.fill,
                     ),

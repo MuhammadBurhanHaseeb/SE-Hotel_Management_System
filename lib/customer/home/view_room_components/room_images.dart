@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ImageListWithPlusFunctionality extends StatefulWidget {
-  final List images;
+  final currentRoom;
 
   const ImageListWithPlusFunctionality({
     Key? key,
-    required this.images
+    this.currentRoom
   }) : super(key: key) ;
 
   @override
@@ -31,9 +31,9 @@ class _ImageListWithPlusFunctionalityState extends State<ImageListWithPlusFuncti
       width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: widget.images.length,
+        itemCount: (widget.currentRoom['gallery']!= null && widget.currentRoom['gallery'].isNotEmpty)?widget.currentRoom['gallery'].length:0,
         itemBuilder: (context, index) {
-          if (index == widget.images.length - 1) {
+          if (index == widget.currentRoom['gallery'].length - 1) {
             return Padding(
               padding: const EdgeInsets.only(right:16.0),
               child: Container(
@@ -45,8 +45,8 @@ class _ImageListWithPlusFunctionalityState extends State<ImageListWithPlusFuncti
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: NetworkImage(
-                                widget.images[index]) ,
+                            image: (widget.currentRoom['gallery']!= null && widget.currentRoom['gallery'].isNotEmpty)
+                                ?NetworkImage(widget.currentRoom['gallery'][index].toString()):AssetImage("assets/images/no_image.jpg") as ImageProvider,
                             fit: BoxFit.fill,
                           )),
                     ),
@@ -95,7 +95,7 @@ class _ImageListWithPlusFunctionalityState extends State<ImageListWithPlusFuncti
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image: NetworkImage(
-                          widget.images[index]),
+                          widget.currentRoom['gallery'][index]),
                       fit: BoxFit.fill,
                     )),
               ),

@@ -134,9 +134,8 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                     currentRoomId: widget.currentRoom['_id'].toString(),
                     currentRoomName: widget.currentRoom['roomName'].toString(),
                     currentFloorNo: widget.currentRoom['floorNo'],
-                  mainImage:(widget.currentRoom['gallery']!= null ||widget.currentRoom['gallery']!= [])
+                  mainImage:(widget.currentRoom['gallery']!= null && widget.currentRoom['gallery'].isNotEmpty)
                       ?widget.currentRoom['gallery'][0].toString():"https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
-                   ,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
@@ -173,7 +172,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: ImageListWithPlusFunctionality(
-                    images: widget.currentRoom['gallery'],
+                    currentRoom: widget.currentRoom,
                   ),
                 ),
                 Padding(
