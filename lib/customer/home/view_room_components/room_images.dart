@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 
 class ImageListWithPlusFunctionality extends StatefulWidget {
+  final List images;
+
+  const ImageListWithPlusFunctionality({
+    Key? key,
+    required this.images
+  }) : super(key: key) ;
+
   @override
-  _ImageListWithPlusFunctionalityState createState() => _ImageListWithPlusFunctionalityState();
+  State<ImageListWithPlusFunctionality> createState() => _ImageListWithPlusFunctionalityState();
 }
 
 class _ImageListWithPlusFunctionalityState extends State<ImageListWithPlusFunctionality> {
-  List<String> images = [
-    'assets/images/standardroom_1878.jpg',
-    'assets/images/louis.jpg',
-    'assets/images/standardroom_1878.jpg',
-    'assets/images/louis.jpg',
-    'assets/images/standardroom_1878.jpg',
-    'assets/images/louis.jpg',
-    'assets/images/standardroom_1878.jpg',
-    'assets/images/louis.jpg',
-  ];
+  // List<String> images = [
+  //   'assets/images/standardroom_1878.jpg',
+  //   'assets/images/louis.jpg',
+  //   'assets/images/standardroom_1878.jpg',
+  //   'assets/images/louis.jpg',
+  //   'assets/images/standardroom_1878.jpg',
+  //   'assets/images/louis.jpg',
+  //   'assets/images/standardroom_1878.jpg',
+  //   'assets/images/louis.jpg',
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +31,9 @@ class _ImageListWithPlusFunctionalityState extends State<ImageListWithPlusFuncti
       width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: images.length,
+        itemCount: widget.images.length,
         itemBuilder: (context, index) {
-          if (index == images.length - 1) {
+          if (index == widget.images.length - 1) {
             return Padding(
               padding: const EdgeInsets.only(right:16.0),
               child: Container(
@@ -38,8 +45,8 @@ class _ImageListWithPlusFunctionalityState extends State<ImageListWithPlusFuncti
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: AssetImage(
-                                images[index]),
+                            image: NetworkImage(
+                                widget.images[index]) ,
                             fit: BoxFit.fill,
                           )),
                     ),
@@ -52,15 +59,20 @@ class _ImageListWithPlusFunctionalityState extends State<ImageListWithPlusFuncti
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("+",style:TextStyle(
-                                fontSize: 14,
+                            // Text("+",style:TextStyle(
+                            //     fontSize: 14,
+                            //     color: Colors.white,
+                            //     fontFamily: "Poppins"
+                            // ),),
+                            // Text("5",style: TextStyle(
+                            //   fontSize: 20,
+                            //   color: Colors.white,
+                            //   fontFamily: "Poppins"
+                            // ),),
+                            Text("open",style: TextStyle(
+                                fontSize: 17,
                                 color: Colors.white,
                                 fontFamily: "Poppins"
-                            ),),
-                            Text("5",style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontFamily: "Poppins"
                             ),),
                           ],
                         ),//instead of 5 write the remaining pictures nos
@@ -82,8 +94,8 @@ class _ImageListWithPlusFunctionalityState extends State<ImageListWithPlusFuncti
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                      image: AssetImage(
-                          images[index]),
+                      image: NetworkImage(
+                          widget.images[index]),
                       fit: BoxFit.fill,
                     )),
               ),

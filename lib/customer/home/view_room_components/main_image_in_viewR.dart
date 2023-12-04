@@ -8,9 +8,10 @@ class MainImageInViewRoom extends StatefulWidget {
   final String currentRoomId;
   final String currentRoomName;
   final String currentFloorNo;
+  final String mainImage;
   const MainImageInViewRoom({
-    super.key,
-    required this.currentRoomName, required this.currentFloorNo, required this.UserIdM, required this.currentRoomId,
+    // super.key,
+    required this.currentRoomName, required this.currentFloorNo, required this.UserIdM, required this.currentRoomId, required this.mainImage,
   });
 
   @override
@@ -146,8 +147,8 @@ class _MainImageInViewRoomState extends State<MainImageInViewRoom> {
                     )
                   ],
                   image: DecorationImage(
-                    image: AssetImage(
-                        "assets/images/standardroom_1878.jpg"),
+                    image: NetworkImage(
+                        widget.mainImage),
                     fit: BoxFit.fill,
                   )),
             ),
