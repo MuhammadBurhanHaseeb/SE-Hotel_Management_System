@@ -77,6 +77,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
       );
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
+
       allFavContent.add(jsonResponse['success']);
       setState(() {
         rooms = allFavContent;

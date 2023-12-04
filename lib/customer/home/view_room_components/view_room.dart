@@ -130,6 +130,8 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                   height: size.height * 0.07,
                 ),
                 MainImageInViewRoom(
+                    UserIdM: widget.UserIdV,
+                    currentRoomId: widget.currentRoom['_id'].toString(),
                     currentRoomName: widget.currentRoom['roomName'].toString(),
                     currentFloorNo: widget.currentRoom['floorNo']),
                 Padding(

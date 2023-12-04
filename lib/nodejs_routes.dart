@@ -10,13 +10,15 @@ final deleteCredentials = url + 'deleteCredentials';
 final addProfilePic = url + 'addProfilePicToCredentials';
 final getProfilePic = url + 'getProfilePic';
 final updateCredentials = url + 'updateCredentialDocument';
+final addFavToCredential = url + "addFavoritesToCredentials";
+final deleteFavFromCredentials = url + 'removeFavoriteFromCredentials';
 
 final getCategories = url + 'getRoomCategories';
 
 final getRoomsInACategory = url + 'getRoomsInCategory';
 final getfacilitiesInfoById = url + 'getFacilityLookUpValuesById';
-final getaroombyid = url+'getARoomInfo';
+final getaroombyid = url + 'getARoomInfo';
 final getReviewsOfRoom = url + 'getReviewsByRoomid';
 
 final getBookingsOfAUser = url + 'getAllBookingsofaUser';
-final createNewBooking = url +'createBooking';
+final createNewBooking = url + 'createBooking';

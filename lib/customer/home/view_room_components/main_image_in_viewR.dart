@@ -1,13 +1,129 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
 
-class MainImageInViewRoom extends StatelessWidget {
-  const MainImageInViewRoom({
-    super.key,
-    required this.currentRoomName, required this.currentFloorNo,
-  });
-
+class MainImageInViewRoom extends StatefulWidget {
+  final String UserIdM;
+  final String currentRoomId;
   final String currentRoomName;
   final String currentFloorNo;
+  const MainImageInViewRoom({
+    super.key,
+    required this.currentRoomName, required this.currentFloorNo, required this.UserIdM, required this.currentRoomId,
+  });
+
+  @override
+  State<MainImageInViewRoom> createState() => _MainImageInViewRoomState();
+}
+
+class _MainImageInViewRoomState extends State<MainImageInViewRoom> {
+
+  var userCredentials;
+  bool _isLoading = false;
+  bool alreadyFav = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //to show loading circle while things are loading otherwise it wil show error for a short while
+    _fetchFavData();
+  }
+  @override
+  Future<void> _fetchFavData() async {
+    setState(() {
+      _isLoading = true; // Set loading state to true while fetching data
+    });
+
+    // data fetching
+    getCredentialsFunction(widget.UserIdM);
+
+    // Simulating a delay of 1 seconds or 0.5 sec(500 milliseconds) to fetch data
+    await Future.delayed(Duration(milliseconds: 500));
+
+    setState(() {
+      // Set loading state to false after data is fetched
+      _isLoading = false;
+      // Updating data fields based on fetched data
+      checkIfCurrentRoomInUserFav();
+
+    });
+  }
+  @override
+  void getCredentialsFunction(userId) async {
+    var response = await http.get(
+      Uri.parse('$getCredentialss?userId=$userId'),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      userCredentials = jsonResponse['success'];
+    });
+    print("USER CREDENTIALS IN MAIN IMAGE    " + userCredentials.toString());
+  }
+
+  void checkIfCurrentRoomInUserFav(){
+    List favIds = userCredentials[0]['favorites'];
+    setState(() {
+      alreadyFav = favIds.contains(widget.currentRoomId);
+    });
+  }
+
+  void addFavToCredentialFunction() async {
+    print("FAVVVV"+widget.UserIdM+"  "+widget.currentRoomId);
+    if (widget.UserIdM.isNotEmpty && widget.currentRoomId.isNotEmpty ) {
+      var regBody = {
+        "userId":widget.UserIdM,
+        "favoritesIds":[widget.currentRoomId],
+      };
+
+      var response = await http.post(Uri.parse(addFavToCredential),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody));
+
+      var jsonResponse = jsonDecode(response.body);
+
+      print(jsonResponse);
+
+      if (jsonResponse['status']) {
+        print("ALL GOOD FAV");
+      } else {
+        print("SomeThing Went Wrong inadding FAV");
+      }
+    } else {
+      print("ONE OF PARAMETERS EMPTY in FAV");
+    }
+  }
+
+  void deleteFavToCredentialFunction() async {
+    print("FAVVVV"+widget.UserIdM+"  "+widget.currentRoomId);
+    if (widget.UserIdM.isNotEmpty && widget.currentRoomId.isNotEmpty ) {
+      var regBody = {
+        "userId":widget.UserIdM,
+        "roomId":widget.currentRoomId,
+      };
+
+      var response = await http.post(Uri.parse(deleteFavFromCredentials),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(regBody));
+
+      var jsonResponse = jsonDecode(response.body);
+
+      print(jsonResponse);
+
+      if (jsonResponse['status']) {
+        print("ALL GOOD FAV REMOVE");
+      } else {
+        print("SomeThing Went Wrong in deleting FAV");
+      }
+    } else {
+      print("ONE OF PARAMETERS EMPTY in REMOVE FAV");
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +184,25 @@ class MainImageInViewRoom extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: IconButton(
-                icon: Icon(Icons.favorite_border_outlined),
+                icon: alreadyFav?Icon(Icons.favorite_rounded):Icon(Icons.favorite_border_outlined),
                 color: Colors.white,
                 onPressed: () {
-                  Navigator.pop(context);
+                  if(alreadyFav)
+                    {
+                      deleteFavToCredentialFunction();///delete current room from favs
+                      setState(() {
+                        alreadyFav = false;
+                      });
+                    }
+                  else{
+                    addFavToCredentialFunction();  /// adding thecurrent room to logined user favs
+                    setState(() {
+                      alreadyFav = true;
+                    });
+                  }
+                  // alreadyFav
+                  //     ?deleteFavToCredentialFunction()///delete current room from favs
+                  //     :addFavToCredentialFunction();  /// adding thecurrent room to logined user favs
                 },
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -88,7 +219,7 @@ class MainImageInViewRoom extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    currentRoomName,
+                    widget.currentRoomName,
                     style: TextStyle(
                       fontFamily: "Poppins",
                       fontSize: 25,
@@ -102,7 +233,7 @@ class MainImageInViewRoom extends StatelessWidget {
                         color: Color(0xffA0DAFB),
                       ),
                       Text(
-                        currentFloorNo + " floor",
+                        widget.currentFloorNo + " floor",
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: "Poppins",
