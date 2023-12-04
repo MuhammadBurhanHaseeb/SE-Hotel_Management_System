@@ -158,7 +158,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                     ),
                   ],
                 ),
-                ReviewsBlock(reviewsVisible: reviewsVisible, size: size),
+                ReviewsBlock(reviewsVisible: reviewsVisible, size: size,currentRoom: widget.currentRoom,),
               ],
             ),
           ),

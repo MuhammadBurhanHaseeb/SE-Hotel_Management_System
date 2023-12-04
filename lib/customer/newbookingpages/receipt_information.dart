@@ -28,7 +28,7 @@ class ReceiptInfo extends StatelessWidget {
               Text("Order Number",textAlign: TextAlign.start,style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -38,7 +38,7 @@ class ReceiptInfo extends StatelessWidget {
               Text("Name",textAlign: TextAlign.start,style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -47,7 +47,7 @@ class ReceiptInfo extends StatelessWidget {
               Text("Phone No",textAlign: TextAlign.start,style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -56,7 +56,7 @@ class ReceiptInfo extends StatelessWidget {
               Text("Room Name",textAlign: TextAlign.start,style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -65,7 +65,7 @@ class ReceiptInfo extends StatelessWidget {
               Text("Check in",textAlign: TextAlign.start,style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -74,7 +74,7 @@ class ReceiptInfo extends StatelessWidget {
               Text("Check out",textAlign: TextAlign.start,style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -83,7 +83,7 @@ class ReceiptInfo extends StatelessWidget {
               Text("Guests",textAlign: TextAlign.start,style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -92,7 +92,7 @@ class ReceiptInfo extends StatelessWidget {
               Text("Total Payment",textAlign: TextAlign.start,style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
 
             ],
@@ -105,7 +105,7 @@ class ReceiptInfo extends StatelessWidget {
               Text(BookingId,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -114,7 +114,7 @@ class ReceiptInfo extends StatelessWidget {
               Text(reservName,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -123,7 +123,7 @@ class ReceiptInfo extends StatelessWidget {
               Text(BookingphoneNo,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -132,7 +132,7 @@ class ReceiptInfo extends StatelessWidget {
               Text(RoomName,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -141,7 +141,7 @@ class ReceiptInfo extends StatelessWidget {
               Text(checkInDateToDisplay,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -150,7 +150,7 @@ class ReceiptInfo extends StatelessWidget {
               Text(checkOutDateToDisplay,textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
@@ -159,16 +159,16 @@ class ReceiptInfo extends StatelessWidget {
               Text(noOfGuest.toString(),textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
               SizedBox(
                 height: 5,
               ),
               //.....................................................
-              Text(TotalPrice.toString(),textAlign: TextAlign.end,style: TextStyle(
+              Text('\$${TotalPrice.toString()}',textAlign: TextAlign.end,style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Poppins",
-                fontSize: 17,
+                fontSize: 13,
               ),),
 
             ],

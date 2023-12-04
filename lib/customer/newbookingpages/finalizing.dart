@@ -82,16 +82,17 @@ class _FinalizingPageState extends State<FinalizingPage> {
 
       var jsonResponse = jsonDecode(response.body);
 
-      print(jsonResponse['status']);
+      print(jsonResponse);
 
       if (jsonResponse['status']) {
         print("ALL GOOD");
-        print("BOOKING ID: " + jsonResponse['success'][0]['_id']);
+        print("BOOKING ID: " + jsonResponse['success']['_id']);
         await showDialog(
           context: context,
           builder: (context) {
             return AlertBox(
-            BookingId:"8765432478876",//jsonResponse['success'][0]['_id'],
+              UserIdA: widget.UserIdF,
+            BookingId:jsonResponse['success']['_id'],//jsonResponse['success'][0]['_id'],
             reservName:widget.reservName,
             BookingphoneNo:widget.reservCountrycode+widget.reservPhoneno,
             RoomName:widget.currentRoom['roomName'],

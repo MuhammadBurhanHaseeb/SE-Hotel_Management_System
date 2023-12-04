@@ -122,9 +122,11 @@ class _NameOfBookingState extends State<NameOfBooking> {
                   ), // Showing circular progress indicator while loading
                 )
               : CustomTextField(
-                  initialValue: fullname.toString(),
+                  initialValue: fullname,
                   hintText: "Full Name",
-                  onchangedFunction: (value) {},
+                  onchangedFunction: (value) {
+                    fullname = value;
+                  },
                   obscureTexthehe: false),
 
           // _isLoading

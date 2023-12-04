@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'receipt.dart';
 
 class AlertBox extends StatelessWidget {
+  final String UserIdA;
   final String BookingId;
   final String reservName;
   final String BookingphoneNo;
@@ -12,7 +13,7 @@ class AlertBox extends StatelessWidget {
   final num noOfGuest;
   final num TotalPrice;
   const AlertBox({
-    super.key, required this.BookingId, required this.reservName, required this.BookingphoneNo, required this.RoomName, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfGuest, required this.TotalPrice,
+    super.key, required this.BookingId, required this.reservName, required this.BookingphoneNo, required this.RoomName, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfGuest, required this.TotalPrice, required this.UserIdA,
   });
 
   @override
@@ -83,6 +84,7 @@ class AlertBox extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) =>
                       FinalReceipt(
+                        UserIdFR: UserIdA,
                         BookingId:BookingId,
                         reservName:reservName,
                         BookingphoneNo:BookingphoneNo,

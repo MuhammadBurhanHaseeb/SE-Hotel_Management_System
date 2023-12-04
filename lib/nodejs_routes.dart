@@ -16,6 +16,7 @@ final getCategories = url + 'getRoomCategories';
 final getRoomsInACategory = url + 'getRoomsInCategory';
 final getfacilitiesInfoById = url + 'getFacilityLookUpValuesById';
 final getaroombyid = url+'getARoomInfo';
+final getReviewsOfRoom = url + 'getReviewsByRoomid';
 
 final getBookingsOfAUser = url + 'getAllBookingsofaUser';
 final createNewBooking = url +'createBooking';

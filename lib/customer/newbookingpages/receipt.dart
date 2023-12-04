@@ -5,7 +5,60 @@ import '../components/final_bottom_bar.dart';
 import '../home/main_customer_home.dart';
 import 'receipt_information.dart';
 
+import 'package:pdf/pdf.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:pdf/widgets.dart' as pw;
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
+import 'dart:io';
+
+class FinalReceiptPdfGenerator {
+  static Future<pw.Document> generatePdf({
+    required String bookingId,
+    required String reservName,
+    required String bookingphoneNo,
+    required String roomName,
+    required String checkInDateToDisplay,
+    required String checkOutDateToDisplay,
+    required num noOfGuest,
+    required num totalPrice,
+  }) async {
+    final pdf = pw.Document();
+
+    // Add a font to the PDF document
+    final fontData = await rootBundle.load("fonts/Poppins/Poppins-Regular.ttf");
+    final ttf = pw.Font.ttf(fontData.buffer.asByteData());
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
+              children: [
+                pw.Text('Booking ID: $bookingId', style: pw.TextStyle(font: ttf)),
+                pw.Text('Reservation Name: $reservName', style: pw.TextStyle(font: ttf)),
+                pw.Text('Phone Number: $bookingphoneNo', style: pw.TextStyle(font: ttf)),
+                pw.Text('Room Name: $roomName', style: pw.TextStyle(font: ttf)),
+                pw.Text('Check-In: $checkInDateToDisplay', style: pw.TextStyle(font: ttf)),
+                pw.Text('Check-Out: $checkOutDateToDisplay', style: pw.TextStyle(font: ttf)),
+                pw.Text('Number of Guests: $noOfGuest', style: pw.TextStyle(font: ttf)),
+                pw.Text('Total Price: $totalPrice', style: pw.TextStyle(font: ttf)),
+                // Add other widgets from your FinalReceipt here
+              ],
+            ),
+          );
+        },
+      ),
+    );
+
+    return pdf;
+  }
+}
+
 class FinalReceipt extends StatefulWidget {
+  final String UserIdFR;
   final String BookingId;
   final String reservName;
   final String BookingphoneNo;
@@ -14,7 +67,18 @@ class FinalReceipt extends StatefulWidget {
   final String checkOutDateToDisplay;
   final num noOfGuest;
   final num TotalPrice;
-  const FinalReceipt({Key? key, required this.BookingId, required this.reservName, required this.BookingphoneNo, required this.RoomName, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfGuest, required this.TotalPrice}) : super(key: key);
+  const FinalReceipt(
+      {Key? key,
+      required this.BookingId,
+      required this.reservName,
+      required this.BookingphoneNo,
+      required this.RoomName,
+      required this.checkInDateToDisplay,
+      required this.checkOutDateToDisplay,
+      required this.noOfGuest,
+      required this.TotalPrice,
+      required this.UserIdFR})
+      : super(key: key);
 
   @override
   State<FinalReceipt> createState() => _FinalReceiptState();
@@ -42,19 +106,20 @@ class _FinalReceiptState extends State<FinalReceipt> {
       //   ),
       // ),
       body: Padding(
-        padding: const EdgeInsets.only(bottom: 20.0,left: 20,right: 20,top: 50),
+        padding:
+            const EdgeInsets.only(bottom: 20.0, left: 20, right: 20, top: 50),
         child: Center(
           child: Column(
             children: [
-          // Padding(
-          //   padding: const EdgeInsets.only(bottom: 20.0),
-          //   child: IconButton(
-          //       onPressed: () {
-          //         Navigator.pop(context);
-          //       },
-          //     icon: Icon(Icons.close),
-          //     ),
-          // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom: 20.0),
+              //   child: IconButton(
+              //       onPressed: () {
+              //         Navigator.pop(context);
+              //       },
+              //     icon: Icon(Icons.close),
+              //     ),
+              // ),
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -73,6 +138,7 @@ class _FinalReceiptState extends State<FinalReceipt> {
                       ],
                     ),
                   ),
+
                   ///...............................left ticket shape circle
                   Positioned(
                       left: -5,
@@ -83,6 +149,7 @@ class _FinalReceiptState extends State<FinalReceipt> {
                         decoration: const BoxDecoration(
                             color: Colors.white, shape: BoxShape.circle),
                       )),
+
                   ///.............................right ticket shape circle
                   Positioned(
                       right: -5,
@@ -104,23 +171,26 @@ class _FinalReceiptState extends State<FinalReceipt> {
                   TickBlock(),
                   Positioned(
                     top: 125,
-                    child: Text("Booking Confirmed",style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "PoppinsBold",
-                      //fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),),
+                    child: Text(
+                      "Booking Confirmed",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "PoppinsBold",
+                        //fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
 
                   ReceiptInfo(
-                    BookingId:widget.BookingId,
-                    reservName:widget.reservName,
-                    BookingphoneNo:widget.BookingphoneNo,
-                    RoomName:widget.RoomName,
-                    checkInDateToDisplay:widget.checkInDateToDisplay,
-                    checkOutDateToDisplay:widget.checkOutDateToDisplay,
-                    noOfGuest:widget.noOfGuest,
-                    TotalPrice:widget.TotalPrice,
+                    BookingId: widget.BookingId,
+                    reservName: widget.reservName,
+                    BookingphoneNo: widget.BookingphoneNo,
+                    RoomName: widget.RoomName,
+                    checkInDateToDisplay: widget.checkInDateToDisplay,
+                    checkOutDateToDisplay: widget.checkOutDateToDisplay,
+                    noOfGuest: widget.noOfGuest,
+                    TotalPrice: widget.TotalPrice,
                   ),
 
                   ///......................... download receipt button .........................///
@@ -139,8 +209,29 @@ class _FinalReceiptState extends State<FinalReceipt> {
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(10),
-                          onTap: () {
-                            // Add your onTap logic here as well if needed
+                          onTap: () async {
+                            final pdf =
+                                await FinalReceiptPdfGenerator.generatePdf(
+                              bookingId: widget.BookingId,
+                              reservName: widget.reservName,
+                              bookingphoneNo: widget.BookingphoneNo,
+                              roomName: widget.RoomName,
+                              checkInDateToDisplay: widget.checkInDateToDisplay,
+                              checkOutDateToDisplay:
+                                  widget.checkOutDateToDisplay,
+                              noOfGuest: widget.noOfGuest,
+                              totalPrice: widget.TotalPrice,
+                            );
+
+                            // Save the generated PDF to a file
+                            final String dir =
+                                (await getApplicationDocumentsDirectory()).path;
+                            final String path = '$dir/receipt.pdf';
+                            final File file = File(path);
+                            await file.writeAsBytes(await pdf.save());
+
+                            // Open the PDF file
+                            OpenFile.open(path);
                           },
                           onHighlightChanged: (value) {
                             // Change the color when the button is pressed or released
@@ -183,10 +274,12 @@ class _FinalReceiptState extends State<FinalReceipt> {
                       ),
                     ),
                   ),
+
                   ///......................... download receipt button .........................///
                 ],
               ),
               Spacer(),
+
               ///............................ back to home button .......................///
               DecoratedBox(
                 decoration: BoxDecoration(
@@ -200,8 +293,13 @@ class _FinalReceiptState extends State<FinalReceipt> {
                       )
                     ]),
                 child: TextButton(
-                  onPressed: ()  {
-                    ///Navigator.push(context, MaterialPageRoute(builder: (context) => FinalBottomNav()));
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FinalBottomNav(
+                                  UserId: widget.UserIdFR,
+                                )));
                   },
                   child: Text(
                     "Back to home",
@@ -229,8 +327,6 @@ class _FinalReceiptState extends State<FinalReceipt> {
   }
 }
 
-
-
 class TickBlock extends StatelessWidget {
   const TickBlock({
     super.key,
@@ -249,13 +345,13 @@ class TickBlock extends StatelessWidget {
             decoration: BoxDecoration(
               color: Color(0xff656B7C),
               borderRadius: BorderRadius.circular(50),
-          //     boxShadow: [
-          //     BoxShadow(
-          //     color: Colors.grey,
-          //     offset: Offset(0, 0),
-          //     blurRadius: 5,
-          //   )
-          // ]
+              //     boxShadow: [
+              //     BoxShadow(
+              //     color: Colors.grey,
+              //     offset: Offset(0, 0),
+              //     blurRadius: 5,
+              //   )
+              // ]
             ),
           ),
           Container(
@@ -269,7 +365,10 @@ class TickBlock extends StatelessWidget {
                 width: 1.0, // Adjust the width as needed
               ),
             ),
-            child: Icon(Icons.done,color: Colors.white,),
+            child: Icon(
+              Icons.done,
+              color: Colors.white,
+            ),
           ),
         ],
       ),
