@@ -1,77 +1,25 @@
 import 'package:flutter/material.dart';
 
 import 'heading_row_of_reviews.dart';
-import 'package:http/http.dart' as http;
-import 'package:hotel_app/nodejs_routes.dart';
-import 'dart:convert';
+
 
 
 class ReviewsBlock extends StatefulWidget {
-  final currentRoom;
+  final bool reviewsVisible;
+  final Size size;
+  final List reviewsOfRoom;
+  final List reviewCredential;
   const ReviewsBlock({
     super.key,
     required this.reviewsVisible,
-    required this.size, required this.currentRoom,
+    required this.size, required this.reviewsOfRoom, required this.reviewCredential,
   });
-
-  final bool reviewsVisible;
-  final Size size;
 
   @override
   State<ReviewsBlock> createState() => _ReviewsBlockState();
 }
 
 class _ReviewsBlockState extends State<ReviewsBlock> {
-
-  List reviewsOfRoom= [];
-  List reviewCredential = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getReviewsOfRoomFunction();
-    getCredentialsofEveryReview();
-  }
-  void getReviewsOfRoomFunction() async {
-    String cRoomId = widget.currentRoom['_id'];
-    var response = await http.get(
-      Uri.parse('$getReviewsOfRoom?roomId=$cRoomId'),
-      headers: {"Content-Type": "application/json"},
-    );
-    var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
-    setState(() {
-      reviewsOfRoom = jsonResponse['success'];
-    });
-    if(reviewsOfRoom.isNotEmpty) {
-      print("reviewsOfRoom: "+reviewsOfRoom.toString());
-    }
-    else
-    {
-      print("reviews EMPTY");
-    }
-  }
-
-  void getCredentialsofEveryReview()async{
-    List<dynamic> allCredentialContent = [];
-    for(var review in reviewsOfRoom)
-      {
-        String userId = review['userId'];
-        var response = await http.get(
-          Uri.parse('$getCredentialss?userId=$userId'),
-          headers: {"Content-Type": "application/json"},
-        );
-        var jsonResponse = jsonDecode(response.body);
-        print(jsonResponse);
-        allCredentialContent.addAll(jsonResponse['success']);
-        setState(() {
-          reviewCredential = allCredentialContent;
-        });
-        print(reviewCredential);
-      }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -82,10 +30,10 @@ class _ReviewsBlockState extends State<ReviewsBlock> {
           //controller: _scrollController, not working
           physics: NeverScrollableScrollPhysics(),// Disable scrolling for the ListView
           shrinkWrap: true,
-          itemCount: reviewsOfRoom.length,
+          itemCount: widget.reviewsOfRoom!.length,
           itemBuilder: (context, index) {
-            final currentReview = reviewsOfRoom[index];
-            final currentCredential = reviewCredential[index];
+            final currentReview = widget.reviewsOfRoom![index];
+            final currentCredential = widget.reviewCredential![index];
             return Padding(
               padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
               child: Container(
@@ -104,9 +52,9 @@ class _ReviewsBlockState extends State<ReviewsBlock> {
                 child: Column(
                   children: [
                     HeadingRowOfReview(
-                      rating: currentReview['rating'],
-                      userName: currentCredential['fullName'],
-                      userPic: currentCredential['profilePicture'],
+                      rating: currentReview['rating'] != null ?currentReview['rating'].toString():"",
+                      userName: currentCredential['fullName'] != null ?currentCredential['fullName']:"",
+                      userPic: currentCredential['profilePicture'] != null ?currentCredential['profilePicture']:"",
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

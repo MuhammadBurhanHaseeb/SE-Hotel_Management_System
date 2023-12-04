@@ -9,12 +9,17 @@ import 'main_image_in_viewR.dart';
 import 'reviews.dart';
 import 'room_images.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:hotel_app/nodejs_routes.dart';
+import 'dart:convert';
+
 class ViewRoomPage extends StatefulWidget {
   final String UserIdV;
   final currentRoom;
   const ViewRoomPage({
     Key? key,
-    required this.currentRoom, required this.UserIdV,
+    required this.currentRoom,
+    required this.UserIdV,
   }) : super(key: key);
 
   @override
@@ -24,8 +29,82 @@ class ViewRoomPage extends StatefulWidget {
 class _ViewRoomPageState extends State<ViewRoomPage> {
   bool reviewsVisible = false;
 
-  String roomFirstPicture =  " ";
+  String roomFirstPicture = " ";
 
+  List reviewsOfRoom = [];
+  List reviewCredential = [];
+  bool _isLoading = false;
+  num averageRating = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    setState(() {
+      _isLoading = true; // Set loading state to true while fetching data
+    });
+
+    // data fetching
+    getReviewsOfRoomFunction();
+    // Simulating a delay of 1 seconds or 0.5 sec(500 milliseconds) to fetch data
+    await Future.delayed(Duration(milliseconds: 500));
+
+    setState(() {
+      // Set loading state to false after data is fetched
+      _isLoading = false;
+      // Updating data fields based on fetched data
+      getAverageReviewRating();
+    });
+  }
+
+  void getReviewsOfRoomFunction() async {
+    String cRoomId = widget.currentRoom['_id'];
+    print("CURRENT ROOM ID: " + cRoomId);
+    var response = await http.get(
+      Uri.parse('$getReviewsOfRoom?roomId=$cRoomId'),
+      headers: {"Content-Type": "application/json"},
+    );
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    setState(() {
+      reviewsOfRoom = jsonResponse['success'];
+    });
+    if (reviewsOfRoom.isNotEmpty) {
+      print("reviewsOfRoom: " + reviewsOfRoom.toString());
+      getCredentialsofEveryReview();
+    } else {
+      print("reviews EMPTY");
+    }
+  }
+
+  void getCredentialsofEveryReview() async {
+    List<dynamic> allCredentialContent = [];
+    for (var review in reviewsOfRoom) {
+      String userId = review['userId'];
+      var response = await http.get(
+        Uri.parse('$getCredentialss?userId=$userId'),
+        headers: {"Content-Type": "application/json"},
+      );
+      var jsonResponse = jsonDecode(response.body);
+      print(jsonResponse);
+      allCredentialContent.addAll(jsonResponse['success']);
+      setState(() {
+        reviewCredential = allCredentialContent;
+      });
+      print(reviewCredential);
+    }
+  }
+  void getAverageReviewRating(){
+    num total = 0;
+    for (var review in reviewsOfRoom){
+      total = total + review['rating'];
+    }
+    averageRating = total/(reviewsOfRoom.length);
+  }
 
   //final ScrollController _scrollController = ScrollController(); ...not working
   // @override
@@ -35,7 +114,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
   // }
   @override
   Widget build(BuildContext context) {
-    int TotalnoOfReviews = 4345;
+    int TotalnoOfReviews = reviewsOfRoom.length;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -50,7 +129,9 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                 SizedBox(
                   height: size.height * 0.07,
                 ),
-                MainImageInViewRoom(currentRoomName: widget.currentRoom['roomName'].toString(),currentFloorNo: widget.currentRoom['floorNo']),
+                MainImageInViewRoom(
+                    currentRoomName: widget.currentRoom['roomName'].toString(),
+                    currentFloorNo: widget.currentRoom['floorNo']),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: ViewRoomHeadingStyle(
@@ -96,14 +177,17 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: DetailsBlock(
-                      bedrooms: widget. currentRoom['beds'],
+                      bedrooms: widget.currentRoom['beds'],
                       bathrooms: widget.currentRoom['bathrooms'],
                       roomSize: widget.currentRoom['size']),
                 ),
                 ViewRoomHeadingStyle(
                   heading: "Facilities",
                 ),
-                FacilitiesBlock(size: size,faclitiesIds: widget.currentRoom['facilities'],),
+                FacilitiesBlock(
+                  size: size,
+                  faclitiesIds: widget.currentRoom['facilities'],
+                ),
                 Row(
                   children: [
                     ViewRoomHeadingStyle(heading: "Reviews"),
@@ -118,7 +202,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                       width: 3,
                     ),
                     Text(
-                      "5.0",
+                      averageRating.toString(),
                       style: TextStyle(
                           fontFamily: "Poppins", color: Color(0xff0A8ED9)),
                     ), // average reviews
@@ -134,7 +218,7 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          reviewsVisible= !reviewsVisible;
+                          reviewsVisible = !reviewsVisible;
                           //... not working
                           // if (reviewsVisible) {
                           //   // Scroll to the top of the list when it becomes visible
@@ -158,7 +242,18 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                     ),
                   ],
                 ),
-                ReviewsBlock(reviewsVisible: reviewsVisible, size: size,currentRoom: widget.currentRoom,),
+                _isLoading
+                    ? Center(
+                  child:
+                  CircularProgressIndicator(
+                    color: Colors.grey,
+                  ), // Showing circular progress indicator while loading
+                )
+                    :ReviewsBlock(
+                    reviewsOfRoom: reviewsOfRoom,
+                    reviewCredential: reviewCredential,
+                    reviewsVisible: reviewsVisible,
+                    size: size),
               ],
             ),
           ),
@@ -170,17 +265,23 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
           color: Colors.white,
           child: Row(
             children: [
-              Text("\$${widget.currentRoom['price'].toString()}",style: TextStyle(
-                fontFamily: "Poppins",
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Color(0xFF17203A),
-              ),),
-              Text(" /night",style: TextStyle(
-                fontFamily: "Poppins",
-                fontSize: 14,
-                color: Colors.grey,
-              ),),
+              Text(
+                "\$${widget.currentRoom['price'].toString()}",
+                style: TextStyle(
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Color(0xFF17203A),
+                ),
+              ),
+              Text(
+                " /night",
+                style: TextStyle(
+                  fontFamily: "Poppins",
+                  fontSize: 14,
+                  color: Colors.grey,
+                ),
+              ),
               Spacer(),
               DecoratedBox(
                 decoration: BoxDecoration(
@@ -193,38 +294,39 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
                     //       Color(0xff0A8ED9),
                     //       Color(0xffA0DAFB),
                     //     ]),
-                    boxShadow:[
+                    boxShadow: [
                       BoxShadow(
                         color: Colors.black26,
                         offset: Offset(0, 4),
                         blurRadius: 5,
                       )
-                    ]
-                ),
+                    ]),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                        SelectDateForBooking(
-                          UserIdS: widget.UserIdV,
-                          currentRoom: widget.currentRoom,
-                    )
-                    ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectDateForBooking(
+                                  UserIdS: widget.UserIdV,
+                                  currentRoom: widget.currentRoom,
+                                )));
                   },
                   child: Text(
                     "Book Now",
                     style: TextStyle(
                       fontFamily: "Poppins",
                       fontSize: 17,
-                      color:Colors.white,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(top: 12,bottom: 12,left: 24,right: 24)),
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.only(
+                            top: 12, bottom: 12, left: 24, right: 24)),
                   ),
                 ),
               ),
-
             ],
           ),
         ),
@@ -232,6 +334,3 @@ class _ViewRoomPageState extends State<ViewRoomPage> {
     );
   }
 }
-
-
-

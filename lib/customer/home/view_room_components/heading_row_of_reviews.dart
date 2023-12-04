@@ -35,7 +35,7 @@ class _HeadingRowOfReviewState extends State<HeadingRowOfReview> {
       children: [
         CircleAvatar(
           backgroundImage:
-          imageUrl != null ? NetworkImage(imageUrl!) as ImageProvider: AssetImage("assets/images/noimageuser.png"),
+        (imageUrl != url) ? NetworkImage(imageUrl!) as ImageProvider: AssetImage("assets/images/noimageuser.png"),
         ),
         SizedBox(
           width: size.width*0.02,
