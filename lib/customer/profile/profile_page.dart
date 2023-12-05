@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../SignIN/SignIn.dart';
 import 'available_options.dart';
 import 'edit_pro_page.dart';
 import 'name_etc.dart';
@@ -170,7 +171,42 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       optionText: "LogOut",
                       textColor: Colors.red,
-                      press: () {},
+                      press: () {
+
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                surfaceTintColor: Colors.transparent,
+                                title: Text('Logging Out',style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: Colors.black,
+                                ),),
+                                content: Text('Are you sure you want to logout',style: TextStyle(
+                                  fontFamily: "Poppins",
+                                ),),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('cancel',style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: Colors.blue
+                                    ),),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('yes',style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        color: Colors.blue
+                                    ),),
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => SignInScreen(isCustomer: true,)));
+                                    },
+                                  ),
+                                ],
+                              );});
+                      },
                     ),
                   ],
                 ),

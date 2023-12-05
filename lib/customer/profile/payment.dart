@@ -66,6 +66,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
   List allCardsOfUser = [];
   String choosenPaymentId = '';
   List<PaymentsTypeContaingStoredUserCards> paymentTypesWithCardsList = [];
+  String currentRoomImage = '';
+  String currentRoomCardNo = '';
 
   @override
   void initState() {
@@ -168,6 +170,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
           ///............if the current paymentId is stored in the current user's payment method then the
           if (choosenPaymentId == cardOfUser['_id'].toString()) {
             populatedOption.isChoosen = true;
+            currentRoomImage = populatedOption.image_of_payOption;
+            currentRoomCardNo = populatedOption.cardsNo_of_payOption.toString();
           }
         }
       }
@@ -274,6 +278,16 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
               ),
 
               ///........................ add the list here which will get image +payment method name+ the active method
+              _isLoading
+                  ? Container(
+                    height: size.height*0.45,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  )
+                  :
               Container(
                 //height: size.height * 0.09 * paymentMethods.length,
                 //height:paymentMethods.length > 6? size.height+paymentMethods.length: (paymentMethods.length == 6? size.height:size.height*(paymentMethods.length/9)),
@@ -309,7 +323,8 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                               });
 
                               /// change the paymentMethodId in credentials
-                              updatePaymentIdInCredentials(paymentTypesWithCardsList[index].paymentId);
+                              //currentRoomImage = paymentTypesWithCardsList[index].image_of_payOption;
+                              //updatePaymentIdInCredentials(paymentTypesWithCardsList[index].paymentId);
                             });
                           },
                           title: Padding(
@@ -355,6 +370,12 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                         /// change the paymentMethodId in credentials
                                         updatePaymentIdInCredentials(paymentTypesWithCardsList[index].paymentId);
 
+                                        ///updating image of paymentId
+                                        currentRoomImage = paymentTypesWithCardsList[index].image_of_payOption;
+
+                                        ///updating currentRoomCardNo to selected paymentmethod card no
+                                        currentRoomCardNo = paymentTypesWithCardsList[index].cardsNo_of_payOption.toString();
+
                                       },
                                     ),
                                   ],
@@ -397,7 +418,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                 ),
               ),
               SizedBox(
-                height: size.height * 0.22,
+                height: size.height * 0.09,
               ),
               Visibility(
                 visible: widget.isnewBookingPage,
@@ -440,12 +461,15 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                       reservCountrycode:
                                           widget.reservCountrycode,
                                       reservPhoneno: widget.reservPhoneno,
-                                      paymentId:
-                                          "656b84257cafce5748273f79", //right now constant paypal
+                                      paymentCardNo:currentRoomCardNo,
                                       checkInDatetoStore:
                                           widget.checkInDatetoStore,
                                       checkOutDatetoStore:
                                           widget.checkOutDatetoStore,
+                                  paymentImage: currentRoomImage,
+                                  paymentMethodId: widget.userCredentials[0]['paymentMethod'].toString(),
+                                  roomImage: (widget.currentRoom['gallery']!= null && widget.currentRoom['gallery'].isNotEmpty)
+                                    ?widget.currentRoom['gallery'][1].toString():"https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
                                     )));
                       },
                       child: Text(

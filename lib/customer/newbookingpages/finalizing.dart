@@ -9,6 +9,9 @@ import 'package:hotel_app/nodejs_routes.dart';
 
 class FinalizingPage extends StatefulWidget {
   final String UserIdF;
+  final String roomImage;
+  final String paymentImage;
+  final String paymentMethodId;
   final currentRoom;
   final String checkInDateToDisplay;
   final String checkOutDateToDisplay;
@@ -18,11 +21,11 @@ class FinalizingPage extends StatefulWidget {
   final String reservName;
   final String reservCountrycode;
   final String reservPhoneno;
-  final String paymentId;
+  final String paymentCardNo;
   final DateTime checkInDatetoStore;
   final DateTime checkOutDatetoStore;
   const FinalizingPage({
-    Key? key, required this.UserIdF, this.currentRoom, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfDays, required this.noOfGuest, required this.midPrice, required this.reservName, required this.reservCountrycode, required this.reservPhoneno, required this.paymentId, required this.checkInDatetoStore, required this.checkOutDatetoStore,
+    Key? key, required this.UserIdF, this.currentRoom, required this.checkInDateToDisplay, required this.checkOutDateToDisplay, required this.noOfDays, required this.noOfGuest, required this.midPrice, required this.reservName, required this.reservCountrycode, required this.reservPhoneno, required this.paymentCardNo, required this.checkInDatetoStore, required this.checkOutDatetoStore, required this.roomImage, required this.paymentImage, required this.paymentMethodId,
   }) : super(key: key);
 
   @override
@@ -49,7 +52,7 @@ class _FinalizingPageState extends State<FinalizingPage> {
   }
 
   void createBookingFunction() async {
-    print("pppppppp"+widget.UserIdF+"  "+widget.currentRoom.toString()+"  "+widget.checkInDatetoStore.toString()+"  "+widget.checkOutDatetoStore.toString()+"  "+widget.noOfDays.toString()+"  "+widget.noOfGuest.toString()+"  "+price_after_tax.toString()+"  "+widget.reservName+"  "+widget.reservCountrycode+"   "+widget.reservPhoneno+"   "+widget.paymentId);
+    print("pppppppp"+widget.UserIdF+"  "+widget.currentRoom.toString()+"  "+widget.checkInDatetoStore.toString()+"  "+widget.checkOutDatetoStore.toString()+"  "+widget.noOfDays.toString()+"  "+widget.noOfGuest.toString()+"  "+price_after_tax.toString()+"  "+widget.reservName+"  "+widget.reservCountrycode+"   "+widget.reservPhoneno+"   "+widget.paymentMethodId);
     if (
     widget.UserIdF.isNotEmpty &&
     widget.currentRoom.isNotEmpty &&
@@ -61,7 +64,7 @@ class _FinalizingPageState extends State<FinalizingPage> {
     widget.reservName.isNotEmpty &&
     widget.reservCountrycode.isNotEmpty &&
     widget.reservPhoneno.isNotEmpty &&
-    widget.paymentId.isNotEmpty ) {
+    widget.paymentMethodId.isNotEmpty ) {
       var regBody = {
         "userId":widget.UserIdF,
         "roomId":widget.currentRoom['_id'].toString(),
@@ -72,7 +75,7 @@ class _FinalizingPageState extends State<FinalizingPage> {
         "reservationName":widget.reservName,
         "reservationCountryCode":widget.reservCountrycode,
         "reservationPhoneNo":widget.reservPhoneno,
-        "reservationPaymentMethod":widget.paymentId,
+        "reservationPaymentMethod":widget.paymentMethodId,
         "totalPrice": price_after_tax
       };
 
@@ -471,16 +474,16 @@ class _FinalizingPageState extends State<FinalizingPage> {
                               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Image.asset(
-                                  "assets/paymentIcons/paypal.png",
+                                  widget.paymentImage,
                                   width: size.height * 0.03,
                                   height: size.height * 0.03,
                                 ),
                                 Spacer(),
                                 Text(
-                                  "4865291325274",
+                                  "   "+widget.paymentCardNo,
                                   style: TextStyle(
                                     fontFamily: "PoppinsBold",
-                                    fontSize: 17,
+                                    fontSize: 15,
                                     //fontWeight: FontWeight.bold,
                                   ),
                                 ),
