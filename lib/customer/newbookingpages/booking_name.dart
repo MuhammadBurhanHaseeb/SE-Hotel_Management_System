@@ -187,6 +187,7 @@ class _NameOfBookingState extends State<NameOfBooking> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => PaymentMethodPage(
+                                userCredentials: userCredentials,
                                 UserIdP: widget.UserIdN,
                                 isnewBookingPage: true,
                                 currentRoom: widget.currentRoom,

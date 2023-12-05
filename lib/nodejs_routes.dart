@@ -12,6 +12,7 @@ final getProfilePic = url + 'getProfilePic';
 final updateCredentials = url + 'updateCredentialDocument';
 final addFavToCredential = url + "addFavoritesToCredentials";
 final deleteFavFromCredentials = url + 'removeFavoriteFromCredentials';
+final updateUserPaymentMethodId = url + 'updateUserPaymentMethod';
 
 final getCategories = url + 'getRoomCategories';
 
@@ -22,3 +23,6 @@ final getReviewsOfRoom = url + 'getReviewsByRoomid';
 
 final getBookingsOfAUser = url + 'getAllBookingsofaUser';
 final createNewBooking = url + 'createBooking';
+
+final getAllPaymentOptions = url + 'getAllPaymentOptions';
+final getAllpayCardsOfUser = url + 'getAllPaymentCardsofUser';
