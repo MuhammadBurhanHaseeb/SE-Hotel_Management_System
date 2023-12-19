@@ -13,9 +13,15 @@ import 'package:http/http.dart' as http;
 import 'package:hotel_app/nodejs_routes.dart';
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+
+
 void main() async {
   ///to keep user logined until the session(in user.controller.js file) has expired
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
 
   /// for that purpose we check if we have a user info token in shared preference that is local storage
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -76,5 +82,7 @@ class _MyAppState extends State<MyApp> {
                 ? CredentialsAfterSignUp(token: widget.token)
                 : FinalBottomNav(UserId: userId,))
             : SplashScreen());
+
+
   }
 }

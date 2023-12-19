@@ -56,6 +56,11 @@ dependencies:
   pdf: ^3.10.7
   path_provider: ^2.1.1
   open_file: ^3.3.2
+  firebase_core: ^2.24.2
+  cloud_firestore: ^4.13.5
+  firebase_storage: ^11.5.5
+  firebase_auth: ^4.15.2
+  google_sign_in: ^6.1.5
 
 dev_dependencies:
   flutter_test:
@@ -86,7 +91,6 @@ flutter:
     - assets/RiveAssets/
     - assets/bottomicons/
     - assets/paymentIcons/
-    - packages/country_code_picker/flags/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

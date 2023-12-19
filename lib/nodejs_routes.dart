@@ -1,4 +1,4 @@
-final url = 'http://192.168.0.106:3001/'; // local host + port
+final url = 'http://10.5.124.226:3001/'; // local host + port
 
 final registration = url + "registration";
 final login = url + 'login';

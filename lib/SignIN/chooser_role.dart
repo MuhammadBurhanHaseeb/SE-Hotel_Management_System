@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../employeeSignInSignUp/employeeSignIn.dart';
 import 'SignIn.dart';
 
 class ChooseRoleScreen extends StatefulWidget {
@@ -180,9 +181,7 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(10),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SignInScreen(
-                        isCustomer: false,
-                      )));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => EmployeeSignInScreen()));
                     },
                     onHighlightChanged: (value) {
                       // Change the color when the button is pressed or released

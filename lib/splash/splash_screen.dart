@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Center(
             child: Container(
               child: Image.asset(
-                "assets/gifs/منزل.gif",
+                "assets/gifs/Manzil.gif",
                 height: size.height * 0.95,
               ),
         ),
